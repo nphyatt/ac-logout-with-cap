@@ -5,10 +5,11 @@ import {
 } from '@angular/common/http/testing';
 import { Router } from '@angular/router';
 
-import { Platform } from '@ionic/angular';
+import { Platform, ModalController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 
 import {
+  createOverlayControllerMock,
   createPlatformMock,
   createRouterMock,
   createStorageMock
@@ -21,8 +22,6 @@ import { IdentityService } from './identity.service';
 describe('IdentityService', () => {
   let httpTestingController: HttpTestingController;
   let identity: IdentityService;
-  let platform;
-  let router;
 
   beforeAll(() => {
     (window as any).IonicNativeAuth = new BrowserAuthPlugin(
@@ -31,14 +30,16 @@ describe('IdentityService', () => {
   });
 
   beforeEach(() => {
-    platform = createPlatformMock();
-    router = createRouterMock();
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
         IdentityService,
-        { provide: Platform, useValue: platform },
-        { provide: Router, useValue: router },
+        {
+          provide: ModalController,
+          useFactory: () => createOverlayControllerMock('Modal')
+        },
+        { provide: Platform, useFactory: createPlatformMock },
+        { provide: Router, useFactory: createRouterMock },
         { provide: Storage, useFactory: createStorageMock }
       ]
     });
@@ -170,6 +171,7 @@ describe('IdentityService', () => {
 
   describe('on vault locked', () => {
     it('navigates to the login page', () => {
+      const router = TestBed.get(Router);
       identity.onVaultLocked();
       expect(router.navigate).toHaveBeenCalledTimes(1);
       expect(router.navigate).toHaveBeenCalledWith(['login']);

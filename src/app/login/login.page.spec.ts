@@ -84,6 +84,10 @@ describe('LoginPage', () => {
       });
 
       describe('without a stored token', () => {
+        beforeEach(() => {
+          identity.hasStoredSession.and.returnValue(Promise.resolve(false));
+        });
+
         it('hides the biometric login button', fakeAsync(() => {
           component.ionViewWillEnter();
           tick();

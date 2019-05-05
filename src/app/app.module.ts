@@ -11,6 +11,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { httpInterceptorProviders } from './services/http-interceptors';
+import {PinDialogComponentModule  } from './pin-dialog/pin-dialog.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -20,6 +21,7 @@ import { httpInterceptorProviders } from './services/http-interceptors';
     HttpClientModule,
     IonicModule.forRoot(),
     IonicStorageModule.forRoot(),
+    PinDialogComponentModule,
     AppRoutingModule
   ],
   providers: [
