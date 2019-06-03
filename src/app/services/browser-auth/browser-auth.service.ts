@@ -22,6 +22,7 @@ export class BrowserAuthService implements IdentityVault {
     isBiometricsEnabled: false,
     isPasscodeEnabled: false,
     isPasscodeSetupNeeded: false,
+    isSecureStorageModeEnabled: false,
     hideScreenOnBackground: false,
     lockAfter: 50000
   };
@@ -105,7 +106,15 @@ export class BrowserAuthService implements IdentityVault {
     return Promise.resolve(false);
   }
 
+  isSecureStorageModeEnabled(): Promise<boolean> {
+    return Promise.resolve(false);
+  }
+
   setPasscodeEnabled(isPasscodeEnabled: boolean): Promise<void> {
+    return Promise.resolve();
+  }
+
+  setSecureStorageModeEnabled(enabled: boolean): Promise<void> {
     return Promise.resolve();
   }
 

@@ -12,7 +12,8 @@ import {
   IonicNativeAuthPlugin,
   DefaultSession,
   VaultConfig,
-  VaultError
+  VaultError,
+  VaultErrorCodes
 } from '@ionic-enterprise/identity-vault';
 
 import { environment } from '../../../environments/environment';
@@ -37,8 +38,10 @@ export class IdentityService extends IonicIdentityVaultUser<DefaultSession> {
   ) {
     super(plt, {
       authMode: AuthMode.BiometricAndPasscode,
+      // authMode: AuthMode.BiometricOnly,
+      // authMode: AuthMode.BiometricOrPasscode,
       restoreSessionOnReady: false,
-      unlockOnReady: true,
+      unlockOnReady: false,
       unlockOnAccess: true,
       lockAfter: 5000,
       hideScreenOnBackground: true
@@ -73,6 +76,18 @@ export class IdentityService extends IonicIdentityVaultUser<DefaultSession> {
       await this.restoreSession();
     }
     return this.token;
+  }
+
+  async restoreSession(): Promise<DefaultSession> {
+    try {
+      return await super.restoreSession();
+    } catch (error) {
+      if (error.code === VaultErrorCodes.VaultLocked) {
+        console.log('working around the valut locked issue');
+        const vault = await this.getVault();
+        await vault.clear();
+      }
+    }
   }
 
   onSessionRestored(session: DefaultSession) {
