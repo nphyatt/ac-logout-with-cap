@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
+import { AuthMode } from '@ionic-enterprise/identity-vault';
+
 import { IdentityService } from '../services/identity';
 import { AuthenticationService } from '../services/authentication';
 
@@ -11,6 +13,7 @@ import { AuthenticationService } from '../services/authentication';
 export class SettingsPage implements OnInit {
   useBiometrics: boolean;
   usePasscode: boolean;
+  useSecureStorageMode: boolean;
   biometricType: string;
 
   constructor(
@@ -21,8 +24,7 @@ export class SettingsPage implements OnInit {
 
   async ngOnInit() {
     await this.identity.ready();
-    this.usePasscode = await  this.identity.isPasscodeEnabled();
-    this.useBiometrics = await this.identity.isBiometricsEnabled();
+    await this.setAuthModeFlags();
     const type = await this.identity.getBiometricType();
     this.biometricType = this.translateBiometricType(type);
   }
@@ -33,18 +35,30 @@ export class SettingsPage implements OnInit {
       .subscribe(() => this.navController.navigateRoot('/login'));
   }
 
-  useBiometricsChanged() {
-    this.identity.setBiometricsEnabled(this.useBiometrics);
+  async authModeChanged() {
+    if (this.useSecureStorageMode) {
+      await this.identity.setAuthMode(AuthMode.SecureStorage);
+    } else if (this.useBiometrics && this.usePasscode) {
+      await this.identity.setAuthMode(AuthMode.BiometricAndPasscode);
+    } else if (this.useBiometrics && !this.usePasscode) {
+      await this.identity.setAuthMode(AuthMode.BiometricOnly);
+    } else if (this.usePasscode && !this.useBiometrics) {
+      await this.identity.setAuthMode(AuthMode.PasscodeOnly);
+    } else {
+      await this.identity.setAuthMode(AuthMode.InMemoryOnly);
+    }
+    await this.setAuthModeFlags();
   }
 
   lock() {
     this.identity.lockOut();
   }
 
-  usePasscodeChanged() {
-    this.identity.setPasscodeEnabled(this.usePasscode);
+  private async setAuthModeFlags() {
+    this.usePasscode = await  this.identity.isPasscodeEnabled();
+    this.useBiometrics = await this.identity.isBiometricsEnabled();
+    this.useSecureStorageMode = await this.identity.isSecureStorageModeEnabled();
   }
-
   private translateBiometricType(type: string): string {
     switch (type) {
       case 'touchID':

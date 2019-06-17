@@ -87,6 +87,9 @@ export class LoginPage {
           this.displayVaultLogin = true;
           this.loginType = 'Passcode';
           break;
+        case AuthMode.SecureStorage:
+          this.loginType = 'Secure Storage';
+          break;
       }
     } else {
       this.displayVaultLogin = false;

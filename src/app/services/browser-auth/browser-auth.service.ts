@@ -14,7 +14,7 @@ export class BrowserAuthService implements IdentityVault {
   constructor(private storage: Storage) {}
 
   config = {
-    authMode: AuthMode.InMemoryOnly,
+    authMode: AuthMode.SecureStorage,
     descriptor: {
       username: '',
       vaultId: ''
@@ -22,7 +22,7 @@ export class BrowserAuthService implements IdentityVault {
     isBiometricsEnabled: false,
     isPasscodeEnabled: false,
     isPasscodeSetupNeeded: false,
-    isSecureStorageModeEnabled: false,
+    isSecureStorageModeEnabled: true,
     hideScreenOnBackground: false,
     lockAfter: 50000
   };
@@ -107,7 +107,7 @@ export class BrowserAuthService implements IdentityVault {
   }
 
   isSecureStorageModeEnabled(): Promise<boolean> {
-    return Promise.resolve(false);
+    return Promise.resolve(true);
   }
 
   setPasscodeEnabled(isPasscodeEnabled: boolean): Promise<void> {
