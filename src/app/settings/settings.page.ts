@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { AuthMode } from '@ionic-enterprise/identity-vault';
 
-import { IdentityService } from '../services/identity';
 import { AuthenticationService } from '../services/authentication';
+import { IdentityService } from '../services/identity';
+import { SettingsService } from '../services/settings/settings.service';
 
 @Component({
   selector: 'app-settings',
@@ -19,7 +20,8 @@ export class SettingsPage implements OnInit {
   constructor(
     private authentication: AuthenticationService,
     private identity: IdentityService,
-    private navController: NavController
+    private navController: NavController,
+    private settings: SettingsService
   ) {}
 
   async ngOnInit() {
@@ -30,9 +32,7 @@ export class SettingsPage implements OnInit {
   }
 
   logout() {
-    this.authentication
-      .logout()
-      .subscribe(() => this.navController.navigateRoot('/login'));
+    this.authentication.logout().subscribe(() => this.navController.navigateRoot('/login'));
   }
 
   async authModeChanged() {
@@ -55,9 +55,15 @@ export class SettingsPage implements OnInit {
   }
 
   private async setAuthModeFlags() {
-    this.usePasscode = await  this.identity.isPasscodeEnabled();
+    this.usePasscode = await this.identity.isPasscodeEnabled();
     this.useBiometrics = await this.identity.isBiometricsEnabled();
     this.useSecureStorageMode = await this.identity.isSecureStorageModeEnabled();
+
+    this.settings.store({
+      useBiometrics: this.useBiometrics,
+      usePasscode: this.usePasscode,
+      useSecureStorageMode: this.useSecureStorageMode
+    });
   }
   private translateBiometricType(type: string): string {
     switch (type) {

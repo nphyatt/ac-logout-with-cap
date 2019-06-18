@@ -20,6 +20,7 @@ import { environment } from '../../../environments/environment';
 import { User } from '../../models/user';
 import { BrowserAuthPlugin } from '../browser-auth/browser-auth.plugin';
 import { PinDialogComponent } from '../../pin-dialog/pin-dialog.component';
+import { SettingsService } from '../settings/settings.service';
 
 @Injectable({
   providedIn: 'root'
@@ -34,11 +35,12 @@ export class IdentityService extends IonicIdentityVaultUser<DefaultSession> {
     private http: HttpClient,
     private modalController: ModalController,
     private router: Router,
-    private plt: Platform
+    private plt: Platform,
+    private settings: SettingsService
   ) {
     super(plt, {
-      authMode: AuthMode.BiometricAndPasscode,
-      // authMode: AuthMode.BiometricOnly,
+      // authMode: AuthMode.BiometricAndPasscode,
+      authMode: AuthMode.BiometricOnly,
       // authMode: AuthMode.BiometricOrPasscode,
       restoreSessionOnReady: false,
       unlockOnReady: false,
@@ -61,8 +63,23 @@ export class IdentityService extends IonicIdentityVaultUser<DefaultSession> {
 
   async set(user: User, token: string): Promise<void> {
     this.user = user;
-    await this.login({ username: user.email, token: token });
+    // This is just one sample login workflow. It mostly respects the settigs
+    // that were last saved with the exception that it uses "Biometrics OR Passcode"
+    // in the case were both were saved and the user logged out.
+    const mode = (await this.useBiometrics())
+      ? AuthMode.BiometricOnly
+      : (await this.settings.usePasscode())
+      ? AuthMode.PasscodeOnly
+      : (await this.settings.useSecureStorageMode())
+      ? AuthMode.SecureStorage
+      : AuthMode.InMemoryOnly;
+    await this.login({ username: user.email, token: token }, mode);
     this.changed.next(this.user);
+  }
+
+  private async useBiometrics(): Promise<boolean> {
+    const use = await Promise.all([this.settings.useBiometrics(), this.isBiometricsAvailable()]);
+    return use[0] && use[1];
   }
 
   async remove(): Promise<void> {
@@ -83,7 +100,6 @@ export class IdentityService extends IonicIdentityVaultUser<DefaultSession> {
       return await super.restoreSession();
     } catch (error) {
       if (error.code === VaultErrorCodes.VaultLocked) {
-        console.log('working around the valut locked issue');
         const vault = await this.getVault();
         await vault.clear();
       }

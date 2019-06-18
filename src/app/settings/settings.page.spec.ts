@@ -7,11 +7,10 @@ import {
   createAuthenticationServiceMock,
   AuthenticationService
 } from '../services/authentication';
-import {
-  createIdentityServiceMock,
-  IdentityService
-} from '../services/identity';
+import { createIdentityServiceMock, IdentityService } from '../services/identity';
 import { createNavControllerMock } from '../../../test/mocks';
+import { SettingsService } from '../services/settings/settings.service';
+import { createSettingsServiceMock } from '../services/settings/settings.mock';
 
 describe('SettingsPage', () => {
   let component: SettingsPage;
@@ -30,7 +29,8 @@ describe('SettingsPage', () => {
       providers: [
         { provide: AuthenticationService, useValue: authentication },
         { provide: IdentityService, useValue: identity },
-        { provide: NavController, useValue: navController }
+        { provide: NavController, useValue: navController },
+        { provide: SettingsService, useValue: createSettingsServiceMock }
       ]
     }).compileComponents();
   }));

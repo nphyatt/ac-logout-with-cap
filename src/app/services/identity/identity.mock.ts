@@ -8,6 +8,7 @@ export function createIdentityServiceMock() {
     getBiometricType: Promise.resolve(''),
     isBiometricsEnabled: Promise.resolve(false),
     isPasscodeEnabled: Promise.resolve(false),
+    isSecureStorageModeEnabled: Promise.resolve(false),
     ready: Promise.resolve(),
     remove: Promise.resolve(),
     restoreSession: Promise.resolve(),
