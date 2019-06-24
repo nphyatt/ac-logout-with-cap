@@ -39,9 +39,6 @@ export class IdentityService extends IonicIdentityVaultUser<DefaultSession> {
     private settings: SettingsService
   ) {
     super(plt, {
-      // authMode: AuthMode.BiometricAndPasscode,
-      authMode: AuthMode.BiometricOnly,
-      // authMode: AuthMode.BiometricOrPasscode,
       restoreSessionOnReady: false,
       unlockOnReady: false,
       unlockOnAccess: true,

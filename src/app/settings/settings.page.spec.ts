@@ -30,7 +30,7 @@ describe('SettingsPage', () => {
         { provide: AuthenticationService, useValue: authentication },
         { provide: IdentityService, useValue: identity },
         { provide: NavController, useValue: navController },
-        { provide: SettingsService, useValue: createSettingsServiceMock }
+        { provide: SettingsService, useFactory: createSettingsServiceMock }
       ]
     }).compileComponents();
   }));
