@@ -67,6 +67,10 @@ export class PinDialogComponent implements OnInit {
     }
   }
 
+  cancel() {
+    this.modalController.dismiss(undefined, 'cancel');
+  }
+
   private initSetPasscodeMode() {
     this.prompt = 'Create Session PIN';
     this.title = 'Create PIN';

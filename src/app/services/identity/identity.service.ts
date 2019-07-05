@@ -50,9 +50,7 @@ export class IdentityService extends IonicIdentityVaultUser<DefaultSession> {
 
   get(): Observable<User> {
     if (!this.user) {
-      return this.http
-        .get<User>(`${environment.dataService}/users/current`)
-        .pipe(tap(u => (this.user = u)));
+      return this.http.get<User>(`${environment.dataService}/users/current`).pipe(tap(u => (this.user = u)));
     } else {
       return of(this.user);
     }
@@ -125,15 +123,15 @@ export class IdentityService extends IonicIdentityVaultUser<DefaultSession> {
 
   async onPasscodeRequest(isPasscodeSetRequest: boolean): Promise<string> {
     const dlg = await this.modalController.create({
-      backdropDismiss: !isPasscodeSetRequest,
+      backdropDismiss: false,
       component: PinDialogComponent,
       componentProps: {
         setPasscodeMode: isPasscodeSetRequest
       }
     });
     dlg.present();
-    const value = await dlg.onDidDismiss();
-    return Promise.resolve(value.data || '');
+    const { data } = await dlg.onDidDismiss();
+    return Promise.resolve(data || '');
   }
 
   onVaultLocked() {

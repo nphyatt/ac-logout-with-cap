@@ -1,6 +1,11 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-title>{{ title }}</ion-title>
+    <ion-buttons *ngIf="!setPasscodeMode" slot="primary">
+      <ion-button icon-only (click)="cancel()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
