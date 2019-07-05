@@ -125,6 +125,7 @@ export class IdentityService extends IonicIdentityVaultUser<DefaultSession> {
 
   async onPasscodeRequest(isPasscodeSetRequest: boolean): Promise<string> {
     const dlg = await this.modalController.create({
+      backdropDismiss: !isPasscodeSetRequest,
       component: PinDialogComponent,
       componentProps: {
         setPasscodeMode: isPasscodeSetRequest
@@ -132,7 +133,7 @@ export class IdentityService extends IonicIdentityVaultUser<DefaultSession> {
     });
     dlg.present();
     const value = await dlg.onDidDismiss();
-    return Promise.resolve(value.data);
+    return Promise.resolve(value.data || '');
   }
 
   onVaultLocked() {
