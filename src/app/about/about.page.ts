@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from '@ionic/angular';
+import { AuthMode } from '@ionic-enterprise/identity-vault';
+
 import { AuthenticationService } from '../services/authentication';
 import { IdentityService } from '../services/identity';
 import { User } from '../models/user';
@@ -11,6 +13,8 @@ import { User } from '../models/user';
 })
 export class AboutPage {
   user: User;
+  authMode: string;
+  bioType: string;
 
   constructor(
     private authentication: AuthenticationService,
@@ -18,8 +22,10 @@ export class AboutPage {
     private navController: NavController
   ) {}
 
-  ionViewDidEnter() {
+  async ionViewDidEnter() {
     this.identity.get().subscribe(u => (this.user = u));
+    this.authMode = AuthMode[await this.identity.getAuthMode()];
+    this.bioType = await this.identity.getBiometricType();
   }
 
   logout() {
