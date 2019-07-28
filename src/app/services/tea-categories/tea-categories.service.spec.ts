@@ -75,5 +75,21 @@ describe('TeaCategoriesService', () => {
       req.flush(testTeaCategories[3]);
       httpTestingController.verify();
     });
+
+    it('triggers another getAll', () => {
+      teaCategoriesService.getAll().subscribe();
+      const getReq = httpTestingController.expectOne(`${environment.dataService}/tea-categories`);
+      getReq.flush(categories);
+
+      teaCategoriesService.save(testTeaCategories[3]).subscribe();
+      const req = httpTestingController.expectOne(`${environment.dataService}/tea-categories/4`);
+      req.flush(testTeaCategories[3]);
+
+      const secondGetReq = httpTestingController.expectOne(`${environment.dataService}/tea-categories`);
+      secondGetReq.flush(categories);
+      httpTestingController.verify();
+
+      expect(true).toBeTruthy();
+    });
   });
 });
