@@ -122,7 +122,8 @@ describe('IdentityService', () => {
           lastName: 'Pigh',
           email: 'alamode@test.org'
         },
-        'I am a token of some sort'
+        'I am a token of some sort',
+        'I am a fresh token'
       );
       identity.get().subscribe(u =>
         expect(u).toEqual({

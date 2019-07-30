@@ -8,11 +8,11 @@ import {
   HttpRequest
 } from '@angular/common/http';
 
-import { IdentityService } from '../identity';
+import { AuthenticationService } from '../authentication/authentication.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private identity: IdentityService) {}
+  constructor(private authentication: AuthenticationService) {}
 
   intercept(
     req: HttpRequest<any>,
@@ -20,7 +20,7 @@ export class AuthInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     return from(
       this.requestRequiresToken(req)
-        ? this.identity.getToken().then(token => {
+        ? this.authentication.getAccessToken().then(token => {
             if (token) {
               req = req.clone({
                 setHeaders: {

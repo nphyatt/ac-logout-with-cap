@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
 import { AuthMode } from '@ionic-enterprise/identity-vault';
 
 import { AuthenticationService } from '../services/authentication';
@@ -20,7 +19,6 @@ export class SettingsPage implements OnInit {
   constructor(
     private authentication: AuthenticationService,
     private identity: IdentityService,
-    private navController: NavController,
     private settings: SettingsService
   ) {}
 
@@ -31,8 +29,8 @@ export class SettingsPage implements OnInit {
     this.biometricType = this.translateBiometricType(type);
   }
 
-  logout() {
-    this.authentication.logout().subscribe(() => this.navController.navigateRoot('/login'));
+  async logout() {
+    this.authentication.logout();
   }
 
   async authModeChanged() {
@@ -50,8 +48,8 @@ export class SettingsPage implements OnInit {
     await this.setAuthModeFlags();
   }
 
-  lock() {
-    this.identity.lockOut();
+  async lock() {
+    await this.identity.lockOut();
   }
 
   private async setAuthModeFlags() {

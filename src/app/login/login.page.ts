@@ -11,8 +11,6 @@ import { AuthMode } from '@ionic-enterprise/identity-vault';
   styleUrls: ['./login.page.scss']
 })
 export class LoginPage {
-  email: string;
-  password: string;
   errorMessage: string;
 
   loginType: string;
@@ -36,8 +34,8 @@ export class LoginPage {
     const hasSession = await this.identity.hasStoredSession();
 
     if (hasSession) {
-      const session = await this.identity.restoreSession();
-      if (session && session.token) {
+      await this.identity.unlock();
+      if (this.authentication.isAuthenticated()) {
         this.goToApp();
         return;
       }
@@ -46,24 +44,15 @@ export class LoginPage {
     alert('Unable to authenticate. Please log in again');
   }
 
-  signInClicked() {
-    this.authentication.login(this.email, this.password).subscribe(
-      (success: boolean) => {
-        this.password = '';
-        if (success) {
-          this.email = '';
-          this.errorMessage = '';
-          this.navController.navigateRoot('/tabs/home');
-        } else {
-          this.errorMessage = 'Invalid e-mail address or password';
-        }
-      },
-      (err: any) => {
-        this.password = '';
-        this.errorMessage = 'Unknown login error';
-        console.error(err);
-      }
-    );
+  async signInClicked() {
+    try {
+      await this.authentication.login();
+      this.errorMessage = '';
+      this.navController.navigateRoot('/tabs/home');
+    } catch (e) {
+      this.errorMessage = e.message || 'Unknown login error';
+      console.error(e);
+    }
   }
 
   private goToApp() {

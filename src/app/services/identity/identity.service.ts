@@ -1,22 +1,15 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Observable, of } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable, of, Subject } from 'rxjs';
 
 import { ModalController, Platform } from '@ionic/angular';
 import {
   AuthMode,
   IonicIdentityVaultUser,
   IonicNativeAuthPlugin,
-  DefaultSession,
-  VaultConfig,
-  VaultError,
-  VaultErrorCodes
 } from '@ionic-enterprise/identity-vault';
 
-import { environment } from '../../../environments/environment';
 import { User } from '../../models/user';
 import { BrowserAuthPlugin } from '../browser-auth/browser-auth.plugin';
 import { PinDialogComponent } from '../../pin-dialog/pin-dialog.component';
@@ -25,12 +18,12 @@ import { SettingsService } from '../settings/settings.service';
 @Injectable({
   providedIn: 'root'
 })
-export class IdentityService extends IonicIdentityVaultUser<DefaultSession> {
+export class IdentityService extends IonicIdentityVaultUser {
   private user: User;
+  changed: Subject<User>;
 
   constructor(
     private browserAuthPlugin: BrowserAuthPlugin,
-    private http: HttpClient,
     private modalController: ModalController,
     private router: Router,
     private plt: Platform,
@@ -46,15 +39,10 @@ export class IdentityService extends IonicIdentityVaultUser<DefaultSession> {
   }
 
   get(): Observable<User> {
-    if (!this.user) {
-      return this.http.get<User>(`${environment.dataService}/users/current`).pipe(tap(u => (this.user = u)));
-    } else {
-      return of(this.user);
-    }
+    return of(this.user);
   }
 
-  async set(user: User, token: string): Promise<void> {
-    this.user = user;
+  async setDesiredAuthMode() {
     // This is just one sample login workflow. It mostly respects the settigs
     // that were last saved with the exception that it uses "Biometrics OR Passcode"
     // in the case were both were saved and the user logged out.
@@ -65,7 +53,12 @@ export class IdentityService extends IonicIdentityVaultUser<DefaultSession> {
       : (await this.settings.useSecureStorageMode())
       ? AuthMode.SecureStorage
       : AuthMode.InMemoryOnly;
-    await this.login({ username: user.email, token: token }, mode);
+    return this.setAuthMode(mode);
+  }
+
+  async set(user: User): Promise<void> {
+    this.user = user;
+    this.changed.next(this.user);
   }
 
   private async useBiometrics(): Promise<boolean> {
@@ -78,42 +71,9 @@ export class IdentityService extends IonicIdentityVaultUser<DefaultSession> {
     this.user = undefined;
   }
 
-  async getToken(): Promise<string> {
-    if (!this.token) {
-      await this.restoreSession();
-    }
-    return this.token;
-  }
-
-  async restoreSession(): Promise<DefaultSession> {
-    try {
-      return await super.restoreSession();
-    } catch (error) {
-      if (error.code === VaultErrorCodes.VaultLocked) {
-        const vault = await this.getVault();
-        await vault.clear();
-      }
-    }
-  }
-
-  onSessionRestored(session: DefaultSession) {
-    console.log('Session Restored: ', session);
-  }
-
-  onSetupError(error: VaultError): void {
-    console.error('Get error during setup', error);
-  }
-
-  onConfigChange(config: VaultConfig): void {
-    console.log('Got a config update: ', config);
-  }
-
-  onVaultReady(config: VaultConfig): void {
-    console.log('The service is ready with config: ', config);
-  }
-
-  onVaultUnlocked(config: VaultConfig): void {
-    console.log('The vault was unlocked with config: ', config);
+  async isLocked(): Promise<boolean> {
+    const vault = await this.getVault();
+    return vault.isLocked();
   }
 
   async onPasscodeRequest(isPasscodeSetRequest: boolean): Promise<string> {

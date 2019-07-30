@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { NavController } from '@ionic/angular';
 import { AuthMode } from '@ionic-enterprise/identity-vault';
 
 import { AuthenticationService } from '../services/authentication';
@@ -19,8 +18,15 @@ export class AboutPage {
   constructor(
     private authentication: AuthenticationService,
     private identity: IdentityService,
-    private navController: NavController
   ) {}
+
+  getUserInfo() {
+    if (this.user === undefined) {
+      return 'user is undefined.';
+    } else {
+      return `Email: ${this.user.email} UserID: ${this.user.id}`;
+    }
+  }
 
   async ionViewDidEnter() {
     this.identity.get().subscribe(u => (this.user = u));
@@ -29,8 +35,6 @@ export class AboutPage {
   }
 
   logout() {
-    this.authentication
-      .logout()
-      .subscribe(() => this.navController.navigateRoot('/login'));
+    this.authentication.logout();
   }
 }

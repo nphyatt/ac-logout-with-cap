@@ -21,6 +21,7 @@
     <preference name="SplashScreenDelay" value="3000" />
     <preference name="UseSwiftLanguageVersion" value="4.2" />
     <preference name="WKPort" value="3200" />
+    <preference name="AndroidLaunchMode" value="singleTask" />
     <allow-navigation href="http://localhost:3200/*" />
     <platform name="android">
         <config-file parent="/*" target="AndroidManifest.xml">
@@ -90,5 +91,4 @@
     <plugin name="cordova-plugin-ionic-webview" spec="~3.1.2" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="~2.1.3" />
     <engine name="ios" spec="~5.0.0" />
-    <engine name="android" spec="~8.0.0" />
 </widget>

@@ -25,9 +25,7 @@ export class HomePage implements OnInit {
   }
 
   logout() {
-    this.authentication
-      .logout()
-      .subscribe(() => this.navController.navigateRoot('/login'));
+    this.authentication.logout();
   }
 
   editCategory(id: number) {
