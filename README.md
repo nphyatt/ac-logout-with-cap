@@ -16,22 +16,24 @@ This application shows the use of Ionic's Identity Vault within a mobile applica
 
 The application can be run in the browser via `npm start`.
 
-A test user exists with the following credentials:
+You can register a user for yourself in our Microsoft AD B2C instance and login with it.
 
-email: test@test.com
-password: test
+We use an an API hosted in heroku to verify the JWT from our Azure AD B2C instance before returning the tea categories.
 
-It is also possible to use a local API. See the `src/environments/environment.ts` file for details. When doing so, the [CS Demo API](https://github.com/ionic-team/cs-demo-api) will need to be running locally.
+It is also possible to use a local API. See the `src/environments/environment.ts` file for details.
+When doing so, the [CS Demo API](https://github.com/ionic-team/cs-demo-api) will need to be running locally.
 
 ## Significant Architecture
 
 ### Authentication Service
 
-The `AuthentationService` handles the login and logout calls to the backend API. Notice that this is _all_ that it does. It does not store any information on the currently logged in user or otherwise handle other user related calls. In a properly abstracted system, the only actions that should be caried out by the `AuthenticationService` are authentication related tasks. Thus, you may add calls to get refresh tokens or other such things to this service, but you should not add calls to change the password (that would be part of a `PasswordService`), or logic to store the state of the of the currently logged in user, which would be better handled via an `IdentityService` (outlined below).
+The `AuthentationService` handles the login and logout protocols for integrating with Azure, Cognito, Auth0, etc. including
+opening the webviews, and storing and fetching the tokens. You can determine the type of storage provider to use IdentityVault, LocalStorage, or a customer TokenStorageProvider implementation.
 
 ### Identity Service
 
 The `IdentityService` handles information about the currently logged in user and is responsible for storing the token that they need for the API calls. In some systems, this is called the `UserService` though that name is not as good (see explanation below). The `IdentityService` inherits from the `IonicIdentityVaultUser` class in order to provide the secure token storage capabilities of Ionic Identity Vault. Without identity vault, this service would use some other mechanism such as `@ionic/storage` to store the token.
+You can configure how you'd like the IdentityVault to work and pass it directly to the Auth Connect service and it will use it to store & retrieve tokens.
 
 _A note on naming:_ I prefer `IdentityService` over `UserService` because `IdentityService` better describes what the service does. It stores is the source of truth for the identity of the current logged in user. Naming it `UserService` would tempt developers to put other "user" related stuff in there that did not apply to the identity of the currently logged in user, such as logic to handle profile changes, or user authoization logic, etc. These are all seperate concerns and thus should all be seperate services.
 
