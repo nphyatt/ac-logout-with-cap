@@ -5,22 +5,13 @@
 </ion-header>
 
 <ion-content padding>
-    <ion-button
-      expand="full"
-      (click)="signInClicked()"
-      color="tertiary"
-      >Sign in</ion-button
-    >
-    <div
-      class="unlock-app"
-      text-center
-      (click)="unlockClicked()"
-    >
-      <ion-icon name="unlock"></ion-icon>
-      <div>{{ loginType }}</div>
-    </div>
+  <ion-button expand="full" (click)="signInClicked()" color="tertiary">Sign in</ion-button>
+  <div *ngIf="loginType" class="unlock-app" text-center (click)="unlockClicked()">
+    <ion-icon name="unlock"></ion-icon>
+    <div>{{ loginType }}</div>
+  </div>
 
-    <div class="error-message">
-      {{ errorMessage }}
-    </div>
+  <div class="error-message">
+    {{ errorMessage }}
+  </div>
 </ion-content>

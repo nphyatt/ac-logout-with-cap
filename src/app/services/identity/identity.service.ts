@@ -18,7 +18,7 @@ import { SettingsService } from '../settings/settings.service';
 @Injectable({
   providedIn: 'root'
 })
-export class IdentityService extends IonicIdentityVaultUser {
+export class IdentityService extends IonicIdentityVaultUser<any> {
   private user: User;
   changed: Subject<User>;
 

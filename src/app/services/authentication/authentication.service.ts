@@ -53,17 +53,21 @@ const webAzureConfig: IonicAuthOptions = {
 })
 export class AuthenticationService  extends IonicAuth {
   private user: User;
+  private identity: IdentityService;
+  private router: Router;
 
   // @ts-ignore
   constructor (
-    private identity: IdentityService,
-    private router: Router,
+    identity: IdentityService,
+    router: Router,
     plt: Platform,
   ) {
     const isCordovaApp = plt.is('cordova');
     const config = isCordovaApp ? cordovaAzureConfig : webAzureConfig;
     config.tokenStorageProvider = identity;
     super(config);
+    this.identity = identity;
+    this.router = router;
     this.identity.get().subscribe(u => (this.user = u));
   }
 

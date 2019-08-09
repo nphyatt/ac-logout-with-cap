@@ -35,7 +35,7 @@ export class LoginPage {
 
     if (hasSession) {
       await this.identity.unlock();
-      if (this.authentication.isAuthenticated()) {
+      if (await this.authentication.isAuthenticated()) {
         this.goToApp();
         return;
       }
