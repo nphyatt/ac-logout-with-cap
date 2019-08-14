@@ -27,7 +27,10 @@ const cordovaAzureConfig: IonicAuthOptions = {
   // multiple apps.
   iosWebView: 'private',
   // The auth provider.
-  authConfig: 'azure'
+  authConfig: 'azure',
+  // This sets the color of the toolbar at the top of the login webview for android.
+  //  Red is just to call attention to what is being set (you don't want to use Red)
+  androidToolbarColor: 'Red'
 };
 
 const webAzureConfig: IonicAuthOptions = {
@@ -63,7 +66,7 @@ export class AuthenticationService  extends IonicAuth {
     plt: Platform,
   ) {
     const isCordovaApp = plt.is('cordova');
-    const config = isCordovaApp ? cordovaAzureConfig : webAzureConfig;
+    const config = isCordovaApp ? auth0Config : webAuth0Config;
     config.tokenStorageProvider = identity;
     super(config);
     this.identity = identity;
@@ -79,7 +82,22 @@ export class AuthenticationService  extends IonicAuth {
       await this.identity.setDesiredAuthMode();
 
       // login with auth service
-      await super.login();
+      try {
+        await super.login();
+      }
+      catch(err) {
+        // This is to handle the password reset case for Azure AD
+        //  This only applicable to Azure AD.
+        console.log('login error: ' + JSON.stringify(err));
+        const message: string = err.message;
+        // This is the error code returned by the Azure AD servers on failure.
+        if (message !== undefined && message.startsWith('AADB2C90118')) {
+            // The address you pass back is the custom user flow (policy) endpoint
+            await super.login('https://vikingsquad.b2clogin.com/vikingsquad.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1_password_reset');
+        } else {
+          throw new Error(err.error);
+        }
+      }
   }
 
   async isAuthenticated() {
@@ -112,9 +130,15 @@ export class AuthenticationService  extends IonicAuth {
     if (!idToken) {
       return;
     }
+
+    let email = idToken.email;
+    if (idToken.emails instanceof Array) {
+      email = idToken.emails[0];
+    }
+
     return {
       id: idToken.sub,
-      email: idToken.emails[0],
+      email: email,
       firstName: idToken.firstName,
       lastName: idToken.lastName,
     };
