@@ -66,7 +66,7 @@ export class AuthenticationService  extends IonicAuth {
     plt: Platform,
   ) {
     const isCordovaApp = plt.is('cordova');
-    const config = isCordovaApp ? auth0Config : webAuth0Config;
+    const config = isCordovaApp ? cordovaAzureConfig : webAzureConfig;
     config.tokenStorageProvider = identity;
     super(config);
     this.identity = identity;
