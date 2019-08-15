@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Observable, of, Subject } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { ModalController, Platform } from '@ionic/angular';
@@ -28,8 +28,6 @@ import { SettingsService } from '../settings/settings.service';
 export class IdentityService extends IonicIdentityVaultUser<DefaultSession> {
   private user: User;
 
-  changed: Subject<User>;
-
   constructor(
     private browserAuthPlugin: BrowserAuthPlugin,
     private http: HttpClient,
@@ -45,7 +43,6 @@ export class IdentityService extends IonicIdentityVaultUser<DefaultSession> {
       lockAfter: 5000,
       hideScreenOnBackground: true
     });
-    this.changed = new Subject();
   }
 
   get(): Observable<User> {
@@ -69,7 +66,6 @@ export class IdentityService extends IonicIdentityVaultUser<DefaultSession> {
       ? AuthMode.SecureStorage
       : AuthMode.InMemoryOnly;
     await this.login({ username: user.email, token: token }, mode);
-    this.changed.next(this.user);
   }
 
   private async useBiometrics(): Promise<boolean> {
@@ -80,7 +76,6 @@ export class IdentityService extends IonicIdentityVaultUser<DefaultSession> {
   async remove(): Promise<void> {
     await this.logout();
     this.user = undefined;
-    this.changed.next(this.user);
   }
 
   async getToken(): Promise<string> {
