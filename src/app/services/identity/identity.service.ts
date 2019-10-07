@@ -130,7 +130,6 @@ export class IdentityService extends IonicIdentityVaultUser<DefaultSession> {
   }
 
   onVaultLocked() {
-    console.log('Vault Locked');
     this.router.navigate(['login']);
   }
 

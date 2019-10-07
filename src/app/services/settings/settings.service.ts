@@ -28,12 +28,7 @@ export class SettingsService {
     return v;
   }
 
-  async store(settings: {
-    useBiometrics: boolean;
-    usePasscode: boolean;
-    useSecureStorageMode: boolean;
-  }) {
-    console.log('store:', settings);
+  async store(settings: { useBiometrics: boolean; usePasscode: boolean; useSecureStorageMode: boolean }) {
     if (settings.useBiometrics !== undefined) {
       this.storage.set(this.keys.biometrics, settings.useBiometrics);
     }

@@ -1,11 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import {
-  BiometricType,
-  IdentityVault,
-  PluginConfiguration,
-  AuthMode
-} from '@ionic-enterprise/identity-vault';
+import { BiometricType, IdentityVault, PluginConfiguration, AuthMode } from '@ionic-enterprise/identity-vault';
 
 @Injectable({
   providedIn: 'root'
@@ -68,12 +63,10 @@ export class BrowserAuthService implements IdentityVault {
   }
 
   async storeValue(key: string, value: any): Promise<void> {
-    console.log('store value:', key, value);
     await this.storage.set(key, value);
   }
 
   getValue(key: string): Promise<any> {
-    console.log('get value:', key);
     return this.storage.get(key);
   }
 
