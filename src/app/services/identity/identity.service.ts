@@ -126,7 +126,7 @@ export class IdentityService extends IonicIdentityVaultUser<DefaultSession> {
     });
     dlg.present();
     const { data } = await dlg.onDidDismiss();
-    return Promise.resolve(data || '');
+    return data || '';
   }
 
   onVaultLocked() {

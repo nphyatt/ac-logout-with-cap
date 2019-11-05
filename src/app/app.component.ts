@@ -12,7 +12,6 @@ import { IdentityService } from './services/identity';
 })
 export class AppComponent {
   constructor(
-    private identity: IdentityService,
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar
@@ -20,13 +19,9 @@ export class AppComponent {
     this.initializeApp();
   }
 
-  initializeApp() {
-    this.identity.ready().then(() => {
-      this.identity.get();
-    });
-    this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
-      this.splashScreen.hide();
-    });
+  async initializeApp() {
+    await this.platform.ready();
+    this.statusBar.styleDefault();
+    this.splashScreen.hide();
   }
 }
