@@ -1,5 +1,5 @@
 {
-  "name": "test-iv",
+  "name": "auth-with-identity-vault-demo",
   "integrations": {
     "cordova": {}
   },
