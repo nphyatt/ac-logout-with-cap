@@ -11,7 +11,7 @@ import { SettingsService } from '../settings/settings.service';
 @Injectable({
   providedIn: 'root'
 })
-export class IdentityService extends IonicIdentityVaultUser<any> {
+export class VaultService extends IonicIdentityVaultUser<any> {
   constructor(
     private browserAuthPlugin: BrowserAuthPlugin,
     private modalController: ModalController,
@@ -28,7 +28,7 @@ export class IdentityService extends IonicIdentityVaultUser<any> {
     });
   }
 
-  async setDesiredAuthMode() {
+  async setDesiredAuthMode(): Promise<void> {
     // This is just one sample login workflow. It mostly respects the settigs
     // that were last saved with the exception that it uses "Biometrics OR Passcode"
     // in the case were both were saved and the user logged out.

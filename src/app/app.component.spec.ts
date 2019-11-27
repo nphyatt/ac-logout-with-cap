@@ -6,7 +6,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { AppComponent } from './app.component';
-import { IdentityService } from '@app/services';
+import { VaultService } from '@app/services';
 import { createIdentityServiceMock } from '@app/services/mocks';
 
 describe('AppComponent', () => {
@@ -27,7 +27,7 @@ describe('AppComponent', () => {
       declarations: [AppComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
-        { provide: IdentityService, useValue: identity },
+        { provide: VaultService, useValue: identity },
         { provide: StatusBar, useValue: statusBarSpy },
         { provide: SplashScreen, useValue: splashScreenSpy },
         { provide: Platform, useValue: platformSpy }

@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NavController } from '@ionic/angular';
 
 import { AboutPage } from './about.page';
-import { AuthenticationService, IdentityService } from '@app/services';
+import { AuthenticationService, VaultService } from '@app/services';
 import { createAuthenticationServiceMock, createIdentityServiceMock } from '@app/services/mocks';
 import { createNavControllerMock } from '@test/mocks';
 
@@ -20,7 +20,7 @@ describe('AboutPage', () => {
           provide: AuthenticationService,
           useFactory: createAuthenticationServiceMock
         },
-        { provide: IdentityService, useFactory: createIdentityServiceMock },
+        { provide: VaultService, useFactory: createIdentityServiceMock },
         { provide: NavController, useFactory: createNavControllerMock }
       ]
     }).compileComponents();

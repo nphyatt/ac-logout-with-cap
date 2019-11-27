@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, NavController } from '@ionic/angular';
 
-import { AuthenticationService, IdentityService } from '@app/services';
+import { AuthenticationService, VaultService } from '@app/services';
 import { createIdentityServiceMock, createAuthenticationServiceMock } from '@app/services/mocks';
 import { createNavControllerMock } from '@test/mocks';
 import { LoginPage } from './login.page';
@@ -25,7 +25,7 @@ describe('LoginPage', () => {
       imports: [FormsModule, IonicModule],
       providers: [
         { provide: AuthenticationService, useValue: authentication },
-        { provide: IdentityService, useValue: identity },
+        { provide: VaultService, useValue: identity },
         { provide: NavController, useValue: navController }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]

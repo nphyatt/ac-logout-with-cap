@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthMode } from '@ionic-enterprise/identity-vault';
 
-import { AuthenticationService, IdentityService } from '@app/services';
+import { AuthenticationService, VaultService } from '@app/services';
 import { User } from '@app/models';
 
 @Component({
@@ -16,7 +16,7 @@ export class AboutPage {
 
   constructor(
     private authentication: AuthenticationService,
-    private identity: IdentityService,
+    private vault: VaultService,
   ) {}
 
   getUserInfo() {
@@ -29,8 +29,8 @@ export class AboutPage {
 
   async ionViewDidEnter() {
     this.user = await this.authentication.getUserInfo();
-    this.authMode = AuthMode[await this.identity.getAuthMode()];
-    this.bioType = await this.identity.getBiometricType();
+    this.authMode = AuthMode[await this.vault.getAuthMode()];
+    this.bioType = await this.vault.getBiometricType();
   }
 
   logout() {

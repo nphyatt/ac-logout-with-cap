@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NavController } from '@ionic/angular';
 
 import { SettingsPage } from './settings.page';
-import { AuthenticationService, IdentityService, SettingsService } from '@app/services';
+import { AuthenticationService, VaultService, SettingsService } from '@app/services';
 import {
   createAuthenticationServiceMock,
   createIdentityServiceMock,
@@ -27,7 +27,7 @@ describe('SettingsPage', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
         { provide: AuthenticationService, useValue: authentication },
-        { provide: IdentityService, useValue: identity },
+        { provide: VaultService, useValue: identity },
         { provide: NavController, useValue: navController },
         { provide: SettingsService, useFactory: createSettingsServiceMock }
       ]

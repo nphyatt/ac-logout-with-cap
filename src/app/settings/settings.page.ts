@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthMode } from '@ionic-enterprise/identity-vault';
 
-import { AuthenticationService, IdentityService, SettingsService } from '@app/services';
+import { AuthenticationService, VaultService, SettingsService } from '@app/services';
 
 @Component({
   selector: 'app-settings',
@@ -16,14 +16,14 @@ export class SettingsPage implements OnInit {
 
   constructor(
     private authentication: AuthenticationService,
-    private identity: IdentityService,
+    private vault: VaultService,
     private settings: SettingsService
   ) {}
 
   async ngOnInit() {
-    await this.identity.ready();
+    await this.vault.ready();
     await this.setAuthModeFlags();
-    const type = await this.identity.getBiometricType();
+    const type = await this.vault.getBiometricType();
     this.biometricType = this.translateBiometricType(type);
   }
 
@@ -33,27 +33,27 @@ export class SettingsPage implements OnInit {
 
   async authModeChanged() {
     if (this.useSecureStorageMode) {
-      await this.identity.setAuthMode(AuthMode.SecureStorage);
+      await this.vault.setAuthMode(AuthMode.SecureStorage);
     } else if (this.useBiometrics && this.usePasscode) {
-      await this.identity.setAuthMode(AuthMode.BiometricAndPasscode);
+      await this.vault.setAuthMode(AuthMode.BiometricAndPasscode);
     } else if (this.useBiometrics && !this.usePasscode) {
-      await this.identity.setAuthMode(AuthMode.BiometricOnly);
+      await this.vault.setAuthMode(AuthMode.BiometricOnly);
     } else if (this.usePasscode && !this.useBiometrics) {
-      await this.identity.setAuthMode(AuthMode.PasscodeOnly);
+      await this.vault.setAuthMode(AuthMode.PasscodeOnly);
     } else {
-      await this.identity.setAuthMode(AuthMode.InMemoryOnly);
+      await this.vault.setAuthMode(AuthMode.InMemoryOnly);
     }
     await this.setAuthModeFlags();
   }
 
   async lock() {
-    await this.identity.lockOut();
+    await this.vault.lockOut();
   }
 
   private async setAuthModeFlags() {
-    this.usePasscode = await this.identity.isPasscodeEnabled();
-    this.useBiometrics = await this.identity.isBiometricsEnabled();
-    this.useSecureStorageMode = await this.identity.isSecureStorageModeEnabled();
+    this.usePasscode = await this.vault.isPasscodeEnabled();
+    this.useBiometrics = await this.vault.isBiometricsEnabled();
+    this.useSecureStorageMode = await this.vault.isSecureStorageModeEnabled();
 
     this.settings.store({
       useBiometrics: this.useBiometrics,

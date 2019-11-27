@@ -4,29 +4,29 @@ import { Platform } from '@ionic/angular';
 import { IonicAuth } from '@ionic-enterprise/auth';
 
 import { cordovaAzureConfig, webAzureConfig } from '@env/environment';
-import { IdentityService } from '../identity/identity.service';
+import { VaultService } from '../vault/vault.service';
 import { User } from '@app/models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService extends IonicAuth {
-  private identity: IdentityService;
+  private vault: VaultService;
   private router: Router;
 
   // @ts-ignore
-  constructor(identity: IdentityService, router: Router, platform: Platform) {
+  constructor(vault: VaultService, router: Router, platform: Platform) {
     const isCordovaApp = platform.is('cordova');
     const config = isCordovaApp ? cordovaAzureConfig : webAzureConfig;
-    config.tokenStorageProvider = identity;
+    config.tokenStorageProvider = vault;
     super(config);
-    this.identity = identity;
+    this.vault = vault;
     this.router = router;
   }
 
   async login(): Promise<void> {
-    await this.identity.logout();
-    await this.identity.setDesiredAuthMode();
+    await this.vault.logout();
+    await this.vault.setDesiredAuthMode();
 
     try {
       await super.login();
@@ -49,12 +49,12 @@ export class AuthenticationService extends IonicAuth {
 
   async isAuthenticated(): Promise<boolean> {
     // you could also automatically attempt to unlock the vault if desired
-    const isVaultLocked = await this.identity.isLocked();
+    const isVaultLocked = await this.vault.isLocked();
     return !isVaultLocked && (await super.isAuthenticated());
   }
 
   async onLogout(): Promise<void> {
-    await this.identity.logout();
+    await this.vault.logout();
     this.router.navigate(['login']);
   }
 

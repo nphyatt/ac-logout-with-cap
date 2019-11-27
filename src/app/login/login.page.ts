@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from '@ionic/angular';
 
-import { AuthenticationService, IdentityService } from '@app/services';
+import { AuthenticationService, VaultService } from '@app/services';
 import { AuthMode } from '@ionic-enterprise/identity-vault';
 
 @Component({
@@ -17,7 +17,7 @@ export class LoginPage {
 
   constructor(
     private authentication: AuthenticationService,
-    private identity: IdentityService,
+    private vault: VaultService,
     private navController: NavController
   ) {}
 
@@ -30,10 +30,10 @@ export class LoginPage {
   }
 
   async unlockClicked() {
-    const hasSession = await this.identity.hasStoredSession();
+    const hasSession = await this.vault.hasStoredSession();
 
     if (hasSession) {
-      await this.identity.unlock();
+      await this.vault.unlock();
       if (await this.authentication.isAuthenticated()) {
         this.goToApp();
         return;
@@ -59,8 +59,8 @@ export class LoginPage {
   }
 
   private async initLoginType(): Promise<void> {
-    if (await this.identity.hasStoredSession()) {
-      const authMode = await this.identity.getAuthMode();
+    if (await this.vault.hasStoredSession()) {
+      const authMode = await this.vault.getAuthMode();
       switch (authMode) {
         case AuthMode.BiometricAndPasscode:
           this.displayVaultLogin = true;
@@ -86,7 +86,7 @@ export class LoginPage {
   }
 
   private async translateBiometricType(): Promise<string> {
-    const type = await this.identity.getBiometricType();
+    const type = await this.vault.getBiometricType();
     switch (type) {
       case 'touchID':
         return 'TouchID';
