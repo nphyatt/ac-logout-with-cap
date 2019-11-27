@@ -1,34 +1,20 @@
 import { TestBed, inject } from '@angular/core/testing';
-import {
-  HttpClientTestingModule,
-  HttpTestingController
-} from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { Router } from '@angular/router';
 
 import { Platform, ModalController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 
-import {
-  createOverlayControllerMock,
-  createPlatformMock,
-  createRouterMock,
-  createStorageMock
-} from '../../../../test/mocks';
-import { environment } from '../../../environments/environment';
-import { BrowserAuthPlugin } from '../browser-auth/browser-auth.plugin';
-import { BrowserAuthService } from '../browser-auth/browser-auth.service';
-import { IdentityService } from './identity.service';
-import { SettingsService } from '../settings/settings.service';
-import { createSettingsServiceMock } from '../settings/settings.mock';
+import { createOverlayControllerMock, createPlatformMock, createRouterMock, createStorageMock } from '@test/mocks';
+import { BrowserAuthPlugin, BrowserAuthService, IdentityService, SettingsService } from '@app/services';
+import { createSettingsServiceMock } from '@app/services/mocks';
 
 describe('IdentityService', () => {
   let httpTestingController: HttpTestingController;
   let identity: IdentityService;
 
   beforeAll(() => {
-    (window as any).IonicNativeAuth = new BrowserAuthPlugin(
-      new BrowserAuthService(createStorageMock())
-    );
+    (window as any).IonicNativeAuth = new BrowserAuthPlugin(new BrowserAuthService(createStorageMock()));
   });
 
   beforeEach(() => {
@@ -56,121 +42,6 @@ describe('IdentityService', () => {
 
   it('injects', () => {
     expect(identity).toBeTruthy();
-  });
-
-  describe('get', () => {
-    it('gets the user', () => {
-      identity.get().subscribe(u =>
-        expect(u).toEqual({
-          id: 42,
-          firstName: 'Douglas',
-          lastName: 'Adams',
-          email: 'thank.you@forthefish.com'
-        })
-      );
-      const req = httpTestingController.expectOne(
-        `${environment.dataService}/users/current`
-      );
-      expect(req.request.method).toEqual('GET');
-      req.flush({
-        id: 42,
-        firstName: 'Douglas',
-        lastName: 'Adams',
-        email: 'thank.you@forthefish.com'
-      });
-      httpTestingController.verify();
-    });
-
-    it('caches the user', () => {
-      identity.get().subscribe(u =>
-        expect(u).toEqual({
-          id: 42,
-          firstName: 'Douglas',
-          lastName: 'Adams',
-          email: 'thank.you@forthefish.com'
-        })
-      );
-      const req = httpTestingController.expectOne(
-        `${environment.dataService}/users/current`
-      );
-      expect(req.request.method).toEqual('GET');
-      req.flush({
-        id: 42,
-        firstName: 'Douglas',
-        lastName: 'Adams',
-        email: 'thank.you@forthefish.com'
-      });
-      httpTestingController.verify();
-      identity.get().subscribe(u =>
-        expect(u).toEqual({
-          id: 42,
-          firstName: 'Douglas',
-          lastName: 'Adams',
-          email: 'thank.you@forthefish.com'
-        })
-      );
-      httpTestingController.verify();
-    });
-  });
-
-  describe('set', () => {
-    it('sets the user, caching it', () => {
-      identity.set(
-        {
-          id: 314159,
-          firstName: 'Sherry',
-          lastName: 'Pigh',
-          email: 'alamode@test.org'
-        },
-        'I am a token of some sort',
-        'I am a fresh token'
-      );
-      identity.get().subscribe(u =>
-        expect(u).toEqual({
-          id: 314159,
-          firstName: 'Sherry',
-          lastName: 'Pigh',
-          email: 'alamode@test.org'
-        })
-      );
-      httpTestingController.verify();
-    });
-  });
-
-  describe('remove', () => {
-    beforeEach(() => {
-      identity.get().subscribe();
-      const req = httpTestingController.expectOne(
-        `${environment.dataService}/users/current`
-      );
-      expect(req.request.method).toEqual('GET');
-      req.flush({
-        id: 42,
-        firstName: 'Douglas',
-        lastName: 'Adams',
-        email: 'thank.you@forthefish.com'
-      });
-      httpTestingController.verify();
-      spyOn(identity, 'logout').and.returnValue(Promise.resolve());
-    });
-
-    it('removes the user from the cache (thus forcing a GET on the next get())', async () => {
-      identity.get().subscribe();
-      httpTestingController.verify();
-      await identity.remove();
-      identity.get().subscribe();
-      const req = httpTestingController.expectOne(
-        `${environment.dataService}/users/current`
-      );
-      expect(req.request.method).toEqual('GET');
-      req.flush({
-        id: 42,
-        firstName: 'Douglas',
-        lastName: 'Adams',
-        email: 'thank.you@forthefish.com'
-      });
-      httpTestingController.verify();
-    });
   });
 
   describe('on vault locked', () => {

@@ -1,4 +1,4 @@
-import { TeaCategory } from '../../models/tea-category';
+import { TeaCategory } from '@app/models';
 
 export const testTeaCategories: Array<TeaCategory> = [
   {

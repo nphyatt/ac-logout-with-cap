@@ -1,27 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Observable, of, Subject } from 'rxjs';
-
 import { ModalController, Platform } from '@ionic/angular';
-import {
-  AuthMode,
-  IonicIdentityVaultUser,
-  IonicNativeAuthPlugin,
-} from '@ionic-enterprise/identity-vault';
+import { AuthMode, IonicIdentityVaultUser, IonicNativeAuthPlugin } from '@ionic-enterprise/identity-vault';
 
-import { User } from '../../models/user';
+import { PinDialogComponent } from '@app/pin-dialog/pin-dialog.component';
 import { BrowserAuthPlugin } from '../browser-auth/browser-auth.plugin';
-import { PinDialogComponent } from '../../pin-dialog/pin-dialog.component';
 import { SettingsService } from '../settings/settings.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class IdentityService extends IonicIdentityVaultUser<any> {
-  private user: User;
-  changed: Subject<User>;
-
   constructor(
     private browserAuthPlugin: BrowserAuthPlugin,
     private modalController: ModalController,
@@ -38,10 +28,6 @@ export class IdentityService extends IonicIdentityVaultUser<any> {
     });
   }
 
-  get(): Observable<User> {
-    return of(this.user);
-  }
-
   async setDesiredAuthMode() {
     // This is just one sample login workflow. It mostly respects the settigs
     // that were last saved with the exception that it uses "Biometrics OR Passcode"
@@ -56,19 +42,9 @@ export class IdentityService extends IonicIdentityVaultUser<any> {
     return this.setAuthMode(mode);
   }
 
-  async set(user: User): Promise<void> {
-    this.user = user;
-    this.changed.next(this.user);
-  }
-
   private async useBiometrics(): Promise<boolean> {
     const use = await Promise.all([this.settings.useBiometrics(), this.isBiometricsAvailable()]);
     return use[0] && use[1];
-  }
-
-  async remove(): Promise<void> {
-    await this.logout();
-    this.user = undefined;
   }
 
   async isLocked(): Promise<boolean> {

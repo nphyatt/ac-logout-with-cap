@@ -3,14 +3,13 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NavController } from '@ionic/angular';
 
 import { SettingsPage } from './settings.page';
+import { AuthenticationService, IdentityService, SettingsService } from '@app/services';
 import {
   createAuthenticationServiceMock,
-  AuthenticationService
-} from '../services/authentication';
-import { createIdentityServiceMock, IdentityService } from '../services/identity';
-import { createNavControllerMock } from '../../../test/mocks';
-import { SettingsService } from '../services/settings/settings.service';
-import { createSettingsServiceMock } from '../services/settings/settings.mock';
+  createIdentityServiceMock,
+  createSettingsServiceMock
+} from '@app/services/mocks';
+import { createNavControllerMock } from '@test/mocks';
 
 describe('SettingsPage', () => {
   let component: SettingsPage;

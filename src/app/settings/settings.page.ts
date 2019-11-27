@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthMode } from '@ionic-enterprise/identity-vault';
 
-import { AuthenticationService } from '../services/authentication';
-import { IdentityService } from '../services/identity';
-import { SettingsService } from '../services/settings/settings.service';
+import { AuthenticationService, IdentityService, SettingsService } from '@app/services';
 
 @Component({
   selector: 'app-settings',

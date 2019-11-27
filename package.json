@@ -10,7 +10,7 @@
     "e2e": "ng e2e",
     "lint": "ng lint",
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --port=8100",
     "start:md": "ionic cordova run android --prod",
     "test": "ng test --browsers=ChromeHeadless",
     "test:debug": "ng test"

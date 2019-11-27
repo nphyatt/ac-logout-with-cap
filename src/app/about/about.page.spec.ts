@@ -3,15 +3,9 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NavController } from '@ionic/angular';
 
 import { AboutPage } from './about.page';
-import {
-  createAuthenticationServiceMock,
-  AuthenticationService
-} from '../services/authentication';
-import {
-  createIdentityServiceMock,
-  IdentityService
-} from '../services/identity';
-import { createNavControllerMock } from '../../../test/mocks';
+import { AuthenticationService, IdentityService } from '@app/services';
+import { createAuthenticationServiceMock, createIdentityServiceMock } from '@app/services/mocks';
+import { createNavControllerMock } from '@test/mocks';
 
 describe('AboutPage', () => {
   let component: AboutPage;

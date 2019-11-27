@@ -1,4 +1,4 @@
-import { User } from '../../models/user';
+import { User } from '@app/models';
 
 export const testIdentity: User = {
   id: 42,

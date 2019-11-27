@@ -4,7 +4,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule, ModalController } from '@ionic/angular';
 
 import { PinDialogComponent } from './pin-dialog.component';
-import { createOverlayControllerMock } from '../../../test/mocks';
+import { createOverlayControllerMock } from '@test/mocks';
 
 describe('PinDialogComponent', () => {
   let component: PinDialogComponent;
