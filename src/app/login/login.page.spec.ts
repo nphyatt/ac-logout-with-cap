@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule, NavController } from '@ionic/angular';
 
 import { AuthenticationService, VaultService } from '@app/services';
-import { createIdentityServiceMock, createAuthenticationServiceMock } from '@app/services/mocks';
+import { createVaultServiceMock, createAuthenticationServiceMock } from '@app/services/mocks';
 import { createNavControllerMock } from '@test/mocks';
 import { LoginPage } from './login.page';
 
@@ -18,7 +18,7 @@ describe('LoginPage', () => {
 
   beforeEach(async(() => {
     authentication = createAuthenticationServiceMock();
-    identity = createIdentityServiceMock();
+    identity = createVaultServiceMock();
     navController = createNavControllerMock();
     TestBed.configureTestingModule({
       declarations: [LoginPage],

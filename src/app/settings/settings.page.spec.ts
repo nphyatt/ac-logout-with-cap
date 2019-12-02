@@ -6,7 +6,7 @@ import { SettingsPage } from './settings.page';
 import { AuthenticationService, VaultService, SettingsService } from '@app/services';
 import {
   createAuthenticationServiceMock,
-  createIdentityServiceMock,
+  createVaultServiceMock,
   createSettingsServiceMock
 } from '@app/services/mocks';
 import { createNavControllerMock } from '@test/mocks';
@@ -20,7 +20,7 @@ describe('SettingsPage', () => {
 
   beforeEach(async(() => {
     authentication = createAuthenticationServiceMock();
-    identity = createIdentityServiceMock();
+    identity = createVaultServiceMock();
     navController = createNavControllerMock();
     TestBed.configureTestingModule({
       declarations: [SettingsPage],

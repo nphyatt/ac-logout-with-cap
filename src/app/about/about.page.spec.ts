@@ -4,7 +4,7 @@ import { NavController } from '@ionic/angular';
 
 import { AboutPage } from './about.page';
 import { AuthenticationService, VaultService } from '@app/services';
-import { createAuthenticationServiceMock, createIdentityServiceMock } from '@app/services/mocks';
+import { createAuthenticationServiceMock, createVaultServiceMock } from '@app/services/mocks';
 import { createNavControllerMock } from '@test/mocks';
 
 describe('AboutPage', () => {
@@ -20,7 +20,7 @@ describe('AboutPage', () => {
           provide: AuthenticationService,
           useFactory: createAuthenticationServiceMock
         },
-        { provide: VaultService, useFactory: createIdentityServiceMock },
+        { provide: VaultService, useFactory: createVaultServiceMock },
         { provide: NavController, useFactory: createNavControllerMock }
       ]
     }).compileComponents();

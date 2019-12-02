@@ -28,15 +28,15 @@ export class SettingsService {
     return v;
   }
 
-  async store(settings: { useBiometrics: boolean; usePasscode: boolean; useSecureStorageMode: boolean }) {
+  async store(settings: { useBiometrics: boolean; usePasscode: boolean; useSecureStorageMode: boolean }): Promise<void> {
     if (settings.useBiometrics !== undefined) {
-      this.storage.set(this.keys.biometrics, settings.useBiometrics);
+      await this.storage.set(this.keys.biometrics, settings.useBiometrics);
     }
     if (settings.usePasscode !== undefined) {
-      this.storage.set(this.keys.passcode, settings.usePasscode);
+      await this.storage.set(this.keys.passcode, settings.usePasscode);
     }
     if (settings.useSecureStorageMode !== undefined) {
-      this.storage.set(this.keys.secureStorageMode, settings.useSecureStorageMode);
+      await this.storage.set(this.keys.secureStorageMode, settings.useSecureStorageMode);
     }
   }
 }

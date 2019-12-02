@@ -7,15 +7,15 @@ export function createActivatedRouteMock() {
 }
 
 export function createNavControllerMock() {
-  return jasmine.createSpyObj('NavController', [
-    'back',
-    'navigateForward',
-    'navigateRoot'
-  ]);
+  return jasmine.createSpyObj('NavController', ['back', 'navigateForward', 'navigateRoot']);
 }
 
 export function createOverlayElementMock(name: string) {
-  return jasmine.createSpyObj(name, ['dismiss', 'present']);
+  return jasmine.createSpyObj(name, {
+    dismiss: Promise.resolve(),
+    present: Promise.resolve(),
+    onDidDismiss: Promise.resolve({role: 'backdrop'})
+  });
 }
 
 export function createOverlayControllerMock(name: string, element?: any) {

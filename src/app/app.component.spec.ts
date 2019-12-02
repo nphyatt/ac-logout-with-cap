@@ -7,7 +7,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { AppComponent } from './app.component';
 import { VaultService } from '@app/services';
-import { createIdentityServiceMock } from '@app/services/mocks';
+import { createVaultServiceMock } from '@app/services/mocks';
 
 describe('AppComponent', () => {
   let identity;
@@ -17,7 +17,7 @@ describe('AppComponent', () => {
   let statusBarSpy;
 
   beforeEach(async(() => {
-    identity = createIdentityServiceMock();
+    identity = createVaultServiceMock();
     statusBarSpy = jasmine.createSpyObj('StatusBar', ['styleDefault']);
     splashScreenSpy = jasmine.createSpyObj('SplashScreen', ['hide']);
     platformReadySpy = Promise.resolve();

@@ -16,7 +16,7 @@ export class AboutPage {
 
   constructor(
     private authentication: AuthenticationService,
-    private vault: VaultService,
+    private vaultService: VaultService,
   ) {}
 
   getUserInfo() {
@@ -29,8 +29,8 @@ export class AboutPage {
 
   async ionViewDidEnter() {
     this.user = await this.authentication.getUserInfo();
-    this.authMode = AuthMode[await this.vault.getAuthMode()];
-    this.bioType = await this.vault.getBiometricType();
+    this.authMode = AuthMode[await this.vaultService.getAuthMode()];
+    this.bioType = await this.vaultService.getBiometricType();
   }
 
   logout() {

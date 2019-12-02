@@ -16,14 +16,14 @@ export class SettingsPage implements OnInit {
 
   constructor(
     private authentication: AuthenticationService,
-    private vault: VaultService,
+    private vaultService: VaultService,
     private settings: SettingsService
   ) {}
 
   async ngOnInit() {
-    await this.vault.ready();
+    await this.vaultService.ready();
     await this.setAuthModeFlags();
-    const type = await this.vault.getBiometricType();
+    const type = await this.vaultService.getBiometricType();
     this.biometricType = this.translateBiometricType(type);
   }
 
@@ -32,35 +32,37 @@ export class SettingsPage implements OnInit {
   }
 
   async authModeChanged() {
-    if (this.useSecureStorageMode) {
-      await this.vault.setAuthMode(AuthMode.SecureStorage);
-    } else if (this.useBiometrics && this.usePasscode) {
-      await this.vault.setAuthMode(AuthMode.BiometricAndPasscode);
-    } else if (this.useBiometrics && !this.usePasscode) {
-      await this.vault.setAuthMode(AuthMode.BiometricOnly);
-    } else if (this.usePasscode && !this.useBiometrics) {
-      await this.vault.setAuthMode(AuthMode.PasscodeOnly);
-    } else {
-      await this.vault.setAuthMode(AuthMode.InMemoryOnly);
-    }
-    await this.setAuthModeFlags();
+    this.forceConsistentModes();
+    await this.storeAuthModeFlags();
+    await this.vaultService.setDesiredAuthMode();
   }
 
   async lock() {
-    await this.vault.lockOut();
+    await this.vaultService.lockOut();
+  }
+
+  private forceConsistentModes() {
+    if (this.useSecureStorageMode) {
+      this.useBiometrics = false;
+      this.usePasscode = false;
+    }
   }
 
   private async setAuthModeFlags() {
-    this.usePasscode = await this.vault.isPasscodeEnabled();
-    this.useBiometrics = await this.vault.isBiometricsEnabled();
-    this.useSecureStorageMode = await this.vault.isSecureStorageModeEnabled();
+    this.usePasscode = await this.vaultService.isPasscodeEnabled();
+    this.useBiometrics = await this.vaultService.isBiometricsEnabled();
+    this.useSecureStorageMode = await this.vaultService.isSecureStorageModeEnabled();
+    await this.storeAuthModeFlags();
+  }
 
-    this.settings.store({
+  private storeAuthModeFlags(): Promise<void> {
+    return this.settings.store({
       useBiometrics: this.useBiometrics,
       usePasscode: this.usePasscode,
       useSecureStorageMode: this.useSecureStorageMode
     });
   }
+
   private translateBiometricType(type: string): string {
     switch (type) {
       case 'touchID':

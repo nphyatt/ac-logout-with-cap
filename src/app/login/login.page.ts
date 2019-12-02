@@ -17,7 +17,7 @@ export class LoginPage {
 
   constructor(
     private authentication: AuthenticationService,
-    private vault: VaultService,
+    private vaultService: VaultService,
     private navController: NavController
   ) {}
 
@@ -30,10 +30,10 @@ export class LoginPage {
   }
 
   async unlockClicked() {
-    const hasSession = await this.vault.hasStoredSession();
+    const hasSession = await this.vaultService.hasStoredSession();
 
     if (hasSession) {
-      await this.vault.unlock();
+      await this.vaultService.unlock();
       if (await this.authentication.isAuthenticated()) {
         this.goToApp();
         return;
@@ -59,8 +59,8 @@ export class LoginPage {
   }
 
   private async initLoginType(): Promise<void> {
-    if (await this.vault.hasStoredSession()) {
-      const authMode = await this.vault.getAuthMode();
+    if (await this.vaultService.hasStoredSession()) {
+      const authMode = await this.vaultService.getAuthMode();
       switch (authMode) {
         case AuthMode.BiometricAndPasscode:
           this.displayVaultLogin = true;
@@ -86,7 +86,7 @@ export class LoginPage {
   }
 
   private async translateBiometricType(): Promise<string> {
-    const type = await this.vault.getBiometricType();
+    const type = await this.vaultService.getBiometricType();
     switch (type) {
       case 'touchID':
         return 'TouchID';

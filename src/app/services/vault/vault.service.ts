@@ -29,16 +29,18 @@ export class VaultService extends IonicIdentityVaultUser<any> {
   }
 
   async setDesiredAuthMode(): Promise<void> {
-    // This is just one sample login workflow. It mostly respects the settigs
-    // that were last saved with the exception that it uses "Biometrics OR Passcode"
-    // in the case were both were saved and the user logged out.
-    const mode = (await this.useBiometrics())
-      ? AuthMode.BiometricOnly
-      : (await this.settings.usePasscode())
-      ? AuthMode.PasscodeOnly
-      : (await this.settings.useSecureStorageMode())
-      ? AuthMode.SecureStorage
-      : AuthMode.InMemoryOnly;
+    const useBio = await this.useBiometrics();
+    const usePasscode = await this.settings.usePasscode();
+    const mode =
+      useBio && usePasscode
+        ? AuthMode.BiometricAndPasscode
+        : useBio
+        ? AuthMode.BiometricOnly
+        : usePasscode
+        ? AuthMode.PasscodeOnly
+        : (await this.settings.useSecureStorageMode())
+        ? AuthMode.SecureStorage
+        : AuthMode.InMemoryOnly;
     return this.setAuthMode(mode);
   }
 
