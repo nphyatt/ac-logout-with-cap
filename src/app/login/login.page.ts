@@ -47,7 +47,7 @@ export class LoginPage {
     try {
       await this.authentication.login();
       this.errorMessage = '';
-      this.navController.navigateRoot('/tabs/home');
+      this.goToApp();
     } catch (e) {
       this.errorMessage = e.message || 'Unknown login error';
       console.error(e);

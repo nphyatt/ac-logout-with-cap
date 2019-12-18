@@ -10,7 +10,7 @@ import { User } from '@app/models';
   styleUrls: ['about.page.scss']
 })
 export class AboutPage {
-  user: User;
+  private user: User;
   authMode: string;
   bioType: string;
 
@@ -21,7 +21,7 @@ export class AboutPage {
 
   getUserInfo() {
     if (this.user === undefined) {
-      return 'user is undefined.';
+      return 'user is undefined';
     } else {
       return `Email: ${this.user.email} UserID: ${this.user.id}`;
     }

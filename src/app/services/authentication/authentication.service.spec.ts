@@ -33,19 +33,5 @@ describe('AuthenticationService', () => {
     expect(authentication).toBeTruthy();
   });
 
-  describe('login', () => {
-    // TODO: Test
-  });
-
-  describe('isAuthenticated', () => {
-    // TODO: Test
-  });
-
-  describe('onLogout', () => {
-    // TODO: Test
-  });
-
-  describe('getUserInfo', () => {
-    // TODO: Test
-  });
+  // Due to the nature of this class, it is very hard to test in any non-fragile manner.
 });

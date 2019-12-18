@@ -6,6 +6,7 @@ import { AboutPage } from './about.page';
 import { AuthenticationService, VaultService } from '@app/services';
 import { createAuthenticationServiceMock, createVaultServiceMock } from '@app/services/mocks';
 import { createNavControllerMock } from '@test/mocks';
+import { AuthMode } from 'plugins/@ionic-enterprise/identity-vault/dist/esm';
 
 describe('AboutPage', () => {
   let component: AboutPage;
@@ -34,5 +35,45 @@ describe('AboutPage', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('init', () => {
+    it('gets the user', async () => {
+      const auth = TestBed.get(AuthenticationService);
+      auth.getUserInfo.and.returnValue(
+        Promise.resolve({
+          email: 'test@test.com',
+          id: '42-73'
+        })
+      );
+      expect(component.getUserInfo()).toEqual('user is undefined');
+      await component.ionViewDidEnter();
+      expect(component.getUserInfo()).toEqual('Email: test@test.com UserID: 42-73');
+    });
+
+    it('gets the auth mode', async () => {
+      const vaultService = TestBed.get(VaultService);
+      vaultService.getAuthMode.and.returnValue(Promise.resolve(AuthMode.InMemoryOnly));
+      await component.ionViewDidEnter();
+      expect(vaultService.getAuthMode).toHaveBeenCalledTimes(1);
+      expect(component.authMode).toEqual('InMemoryOnly');
+    });
+
+    it('gets the auth mode', async () => {
+      const vaultService = TestBed.get(VaultService);
+      vaultService.getBiometricType.and.returnValue(Promise.resolve('FaceID'));
+      await component.ionViewDidEnter();
+      expect(vaultService.getBiometricType).toHaveBeenCalledTimes(1);
+      expect(component.bioType).toEqual('FaceID');
+    });
+  });
+
+
+  describe('logout', () => {
+    it('calls the logout', () => {
+      const auth = TestBed.get(AuthenticationService);
+      component.logout();
+      expect(auth.logout).toHaveBeenCalledTimes(1);
+    });
   });
 });

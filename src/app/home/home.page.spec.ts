@@ -38,4 +38,12 @@ describe('HomePage', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  describe('logout', () => {
+    it('calls the logout', () => {
+      const auth = TestBed.get(AuthenticationService);
+      component.logout();
+      expect(auth.logout).toHaveBeenCalledTimes(1);
+    });
+  });
 });
