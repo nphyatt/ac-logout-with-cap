@@ -25,8 +25,8 @@ describe('AuthGuard', () => {
     let guard: AuthGuard;
     let authenticationService;
     beforeEach(() => {
-      guard = TestBed.get(AuthGuard);
-      authenticationService = TestBed.get(AuthenticationService);
+      guard = TestBed.inject(AuthGuard);
+      authenticationService = TestBed.inject(AuthenticationService);
     });
 
     describe('when the user is authenticated', () => {
@@ -39,7 +39,7 @@ describe('AuthGuard', () => {
       });
 
       it('does not navigate', async () => {
-        const navController = TestBed.get(NavController);
+        const navController = TestBed.inject(NavController);
         await guard.canActivate();
         expect(navController.navigateRoot).not.toHaveBeenCalled();
       });
@@ -55,7 +55,7 @@ describe('AuthGuard', () => {
       });
 
       it('navigates to login', async () => {
-        const navController = TestBed.get(NavController);
+        const navController = TestBed.inject(NavController);
         await guard.canActivate();
         expect(navController.navigateRoot).toHaveBeenCalledTimes(1);
         expect(navController.navigateRoot).toHaveBeenCalledWith('/login');

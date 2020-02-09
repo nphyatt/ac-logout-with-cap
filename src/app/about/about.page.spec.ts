@@ -1,12 +1,12 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NavController } from '@ionic/angular';
+import { AuthMode } from '@ionic-enterprise/identity-vault';
 
 import { AboutPage } from './about.page';
 import { AuthenticationService, VaultService } from '@app/services';
 import { createAuthenticationServiceMock, createVaultServiceMock } from '@app/services/mocks';
 import { createNavControllerMock } from '@test/mocks';
-import { AuthMode } from 'plugins/@ionic-enterprise/identity-vault/dist/esm';
 
 describe('AboutPage', () => {
   let component: AboutPage;
@@ -39,8 +39,8 @@ describe('AboutPage', () => {
 
   describe('init', () => {
     it('gets the user', async () => {
-      const auth = TestBed.get(AuthenticationService);
-      auth.getUserInfo.and.returnValue(
+      const auth = TestBed.inject(AuthenticationService);
+      (auth as any).getUserInfo.and.returnValue(
         Promise.resolve({
           email: 'test@test.com',
           id: '42-73'
@@ -52,26 +52,25 @@ describe('AboutPage', () => {
     });
 
     it('gets the auth mode', async () => {
-      const vaultService = TestBed.get(VaultService);
-      vaultService.getAuthMode.and.returnValue(Promise.resolve(AuthMode.InMemoryOnly));
+      const vaultService = TestBed.inject(VaultService);
+      (vaultService as any).getAuthMode.and.returnValue(Promise.resolve(AuthMode.InMemoryOnly));
       await component.ionViewDidEnter();
       expect(vaultService.getAuthMode).toHaveBeenCalledTimes(1);
       expect(component.authMode).toEqual('InMemoryOnly');
     });
 
     it('gets the auth mode', async () => {
-      const vaultService = TestBed.get(VaultService);
-      vaultService.getBiometricType.and.returnValue(Promise.resolve('FaceID'));
+      const vaultService = TestBed.inject(VaultService);
+      (vaultService as any).getBiometricType.and.returnValue(Promise.resolve('FaceID'));
       await component.ionViewDidEnter();
       expect(vaultService.getBiometricType).toHaveBeenCalledTimes(1);
       expect(component.bioType).toEqual('FaceID');
     });
   });
 
-
   describe('logout', () => {
     it('calls the logout', () => {
-      const auth = TestBed.get(AuthenticationService);
+      const auth = TestBed.inject(AuthenticationService);
       component.logout();
       expect(auth.logout).toHaveBeenCalledTimes(1);
     });

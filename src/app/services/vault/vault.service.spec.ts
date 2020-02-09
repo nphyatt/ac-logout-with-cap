@@ -41,11 +41,11 @@ describe('IdentityService', () => {
       ]
     });
 
-    httpTestingController = TestBed.get(HttpTestingController);
+    httpTestingController = TestBed.inject(HttpTestingController);
   });
 
   beforeEach(inject([VaultService], (service: VaultService) => {
-    vault = TestBed.get(BrowserAuthService);
+    vault = TestBed.inject(BrowserAuthService);
     vaultService = service;
   }));
 
@@ -57,7 +57,7 @@ describe('IdentityService', () => {
     let settingsService;
     beforeEach(async () => {
       await vaultService.logout();
-      settingsService = TestBed.get(SettingsService);
+      settingsService = TestBed.inject(SettingsService);
     });
 
     it('sets bio only', async () => {
@@ -109,7 +109,7 @@ describe('IdentityService', () => {
 
   describe('onPasscodeRequest', () => {
     it('creates a PinDialogComponent modal', () => {
-      const modalController = TestBed.get(ModalController);
+      const modalController = TestBed.inject(ModalController);
       vaultService.onPasscodeRequest(false);
       expect(modalController.create).toHaveBeenCalledTimes(1);
       expect(modalController.create).toHaveBeenCalledWith({
@@ -122,7 +122,7 @@ describe('IdentityService', () => {
     });
 
     it('passes setPasscodeMode', () => {
-      const modalController = TestBed.get(ModalController);
+      const modalController = TestBed.inject(ModalController);
       vaultService.onPasscodeRequest(true);
       expect(modalController.create).toHaveBeenCalledWith({
         backdropDismiss: false,
@@ -155,7 +155,7 @@ describe('IdentityService', () => {
 
   describe('on vault locked', () => {
     it('navigates to the login page', () => {
-      const router = TestBed.get(Router);
+      const router = TestBed.inject(Router);
       vaultService.onVaultLocked();
       expect(router.navigate).toHaveBeenCalledTimes(1);
       expect(router.navigate).toHaveBeenCalledWith(['login']);
