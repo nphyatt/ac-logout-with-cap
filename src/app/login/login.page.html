@@ -4,10 +4,10 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding ion-text-center">
   <ion-button expand="full" (click)="signInClicked()" color="tertiary">Sign in</ion-button>
-  <div *ngIf="loginType" class="unlock-app" text-center (click)="unlockClicked()">
-    <ion-icon name="unlock"></ion-icon>
+  <div *ngIf="loginType" class="unlock-app" (click)="unlockClicked()">
+    <ion-icon name="lock-open"></ion-icon>
     <div>{{ loginType }}</div>
   </div>
 
