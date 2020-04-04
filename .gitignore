@@ -28,6 +28,7 @@ platforms/
 plugins/
 plugins/android.json
 plugins/ios.json
+test/__ngcc_entry_points__.json
 $RECYCLE.BIN/
 
 .DS_Store
