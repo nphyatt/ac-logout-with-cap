@@ -55,13 +55,8 @@ describe('LoginPage', () => {
           vaultService.hasStoredSession.and.returnValue(Promise.resolve(true));
         });
 
-        it('displays the biometric login button', fakeAsync(() => {
-          component.ionViewWillEnter();
-          tick();
-          expect(component.displayVaultLogin).toEqual(true);
-        }));
-
         it('gets the biometric type', fakeAsync(() => {
+          vaultService.isBiometricsAvailable.and.returnValue(Promise.resolve(true));
           vaultService.getBiometricType.and.returnValue(Promise.resolve('blood'));
           component.ionViewWillEnter();
           tick();
@@ -73,12 +68,6 @@ describe('LoginPage', () => {
         beforeEach(() => {
           vaultService.hasStoredSession.and.returnValue(Promise.resolve(false));
         });
-
-        it('hides the biometric login button', fakeAsync(() => {
-          component.ionViewWillEnter();
-          tick();
-          expect(component.displayVaultLogin).toEqual(false);
-        }));
 
         it('does not get the biometric type', fakeAsync(() => {
           vaultService.getBiometricType.and.returnValue(Promise.resolve('blood'));

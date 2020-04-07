@@ -7,13 +7,12 @@ import { AuthMode } from '@ionic-enterprise/identity-vault';
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss']
+  styleUrls: ['./login.page.scss'],
 })
 export class LoginPage {
   errorMessage: string;
 
   loginType: string;
-  displayVaultLogin: boolean;
 
   constructor(
     private authentication: AuthenticationService,
@@ -23,7 +22,7 @@ export class LoginPage {
 
   ionViewWillEnter() {
     try {
-      this.initLoginType();
+      this.setUnlockType();
     } catch (e) {
       console.error('Unable to check token status', e);
     }
@@ -33,14 +32,12 @@ export class LoginPage {
     const hasSession = await this.vaultService.hasStoredSession();
 
     if (hasSession) {
-      await this.vaultService.unlock();
+      await this.tryUnlock();
       if (await this.authentication.isAuthenticated()) {
         this.goToApp();
         return;
       }
     }
-
-    alert('Unable to authenticate. Please log in again');
   }
 
   async signInClicked() {
@@ -58,21 +55,27 @@ export class LoginPage {
     this.navController.navigateRoot('/tabs/home');
   }
 
-  private async initLoginType(): Promise<void> {
+  private async tryUnlock() {
+    try {
+      await this.vaultService.unlock();
+    } catch (e) {
+      this.setUnlockType();
+    }
+  }
+
+  private async setUnlockType(): Promise<void> {
     if (await this.vaultService.hasStoredSession()) {
       const authMode = await this.vaultService.getAuthMode();
       switch (authMode) {
         case AuthMode.BiometricAndPasscode:
-          this.displayVaultLogin = true;
           this.loginType = await this.translateBiometricType();
           this.loginType += ' (Passcode Fallback)';
           break;
         case AuthMode.BiometricOnly:
-          this.displayVaultLogin = true;
-          this.loginType = await this.translateBiometricType();
+          const displayVaultLogin = await this.vaultService.isBiometricsAvailable();
+          this.loginType = displayVaultLogin ? await this.translateBiometricType() : '';
           break;
         case AuthMode.PasscodeOnly:
-          this.displayVaultLogin = true;
           this.loginType = 'Passcode';
           break;
         case AuthMode.SecureStorage:
@@ -80,7 +83,6 @@ export class LoginPage {
           break;
       }
     } else {
-      this.displayVaultLogin = false;
       this.loginType = '';
     }
   }

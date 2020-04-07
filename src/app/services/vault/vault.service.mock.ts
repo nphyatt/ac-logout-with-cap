@@ -3,6 +3,7 @@ export function createVaultServiceMock() {
     getAuthMode: Promise.resolve(),
     getBiometricType: Promise.resolve(),
     hasStoredSession: Promise.resolve(false),
+    isBiometricsAvailable: Promise.resolve(false),
     isBiometricsEnabled: Promise.resolve(false),
     isLocked: Promise.resolve(false),
     isPasscodeEnabled: Promise.resolve(false),
