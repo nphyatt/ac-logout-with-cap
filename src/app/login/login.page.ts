@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController } from '@ionic/angular';
 
 import { AuthenticationService, VaultService } from '@app/services';
-import { AuthMode } from '@ionic-enterprise/identity-vault';
+import { AuthMode, VaultErrorCodes } from '@ionic-enterprise/identity-vault';
 
 @Component({
   selector: 'app-login',
@@ -58,9 +58,12 @@ export class LoginPage {
   private async tryUnlock() {
     try {
       await this.vaultService.unlock();
-    } catch (e) {
+    } catch (error) {
       alert('Unable to unlock the token');
       this.setUnlockType();
+      if (error.code !== VaultErrorCodes.AuthFailed) {
+        throw error;
+      }
     }
   }
 
