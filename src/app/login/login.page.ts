@@ -59,11 +59,20 @@ export class LoginPage {
     try {
       await this.vaultService.unlock();
     } catch (e) {
+      alert('Unable to unlock the token');
       this.setUnlockType();
     }
   }
 
   private async setUnlockType(): Promise<void> {
+    const previousLoginType = this.loginType;
+    await this.determineLoginType();
+    if (previousLoginType && !this.loginType) {
+      alert('The vault is no longer accessible. Please login again');
+    }
+  }
+
+  private async determineLoginType() {
     if (await this.vaultService.hasStoredSession()) {
       const authMode = await this.vaultService.getAuthMode();
       switch (authMode) {
