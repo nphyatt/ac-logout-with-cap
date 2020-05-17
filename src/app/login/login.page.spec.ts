@@ -1,18 +1,16 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, NavController } from '@ionic/angular';
+import { IonicModule } from '@ionic/angular';
 import { AuthMode } from '@ionic-enterprise/identity-vault';
 
 import { AuthenticationService, VaultService } from '@app/services';
 import { createVaultServiceMock, createAuthenticationServiceMock } from '@app/services/mocks';
-import { createNavControllerMock } from '@test/mocks';
 import { LoginPage } from './login.page';
 
 describe('LoginPage', () => {
   let authentication;
   let vaultService;
-  let navController;
 
   let component: LoginPage;
   let fixture: ComponentFixture<LoginPage>;
@@ -20,14 +18,12 @@ describe('LoginPage', () => {
   beforeEach(async(() => {
     authentication = createAuthenticationServiceMock();
     vaultService = createVaultServiceMock();
-    navController = createNavControllerMock();
     TestBed.configureTestingModule({
       declarations: [LoginPage],
       imports: [FormsModule, IonicModule],
       providers: [
         { provide: AuthenticationService, useValue: authentication },
-        { provide: VaultService, useValue: vaultService },
-        { provide: NavController, useValue: navController }
+        { provide: VaultService, useValue: vaultService }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
@@ -84,38 +80,6 @@ describe('LoginPage', () => {
     it('determines if the user has a stored session', async () => {
       await component.unlockClicked();
       expect(vaultService.hasStoredSession).toHaveBeenCalledTimes(1);
-    });
-
-    describe('with a stored session', () => {
-      beforeEach(() => {
-        vaultService.hasStoredSession.and.returnValue(Promise.resolve(true));
-      });
-
-      describe('when the user is not authenticated', () => {
-        it('does not navigate', async () => {
-          await component.unlockClicked();
-          expect(navController.navigateRoot).not.toHaveBeenCalled();
-        });
-      });
-
-      describe('when user is authenticated', () => {
-        beforeEach(() => {
-          authentication.isAuthenticated.and.returnValue(Promise.resolve(true));
-        });
-
-        it('navigates home', async () => {
-          await component.unlockClicked();
-          expect(navController.navigateRoot).toHaveBeenCalledTimes(1);
-          expect(navController.navigateRoot).toHaveBeenCalledWith('/tabs/home');
-        });
-      });
-    });
-
-    describe('when there is no stored session', () => {
-      it('does not navigate', async () => {
-        await component.unlockClicked();
-        expect(navController.navigateRoot).not.toHaveBeenCalled();
-      });
     });
   });
 });

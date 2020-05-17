@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { NavController } from '@ionic/angular';
 
 import { AuthenticationService, VaultService } from '@app/services';
 import { AuthMode, VaultErrorCodes } from '@ionic-enterprise/identity-vault';
@@ -7,18 +6,14 @@ import { AuthMode, VaultErrorCodes } from '@ionic-enterprise/identity-vault';
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss'],
+  styleUrls: ['./login.page.scss']
 })
 export class LoginPage {
   errorMessage: string;
 
   loginType: string;
 
-  constructor(
-    private authentication: AuthenticationService,
-    private vaultService: VaultService,
-    private navController: NavController
-  ) {}
+  constructor(private authentication: AuthenticationService, private vaultService: VaultService) {}
 
   ionViewWillEnter() {
     try {
@@ -33,10 +28,6 @@ export class LoginPage {
 
     if (hasSession) {
       await this.tryUnlock();
-      if (await this.authentication.isAuthenticated()) {
-        this.goToApp();
-        return;
-      }
     }
   }
 
@@ -44,15 +35,10 @@ export class LoginPage {
     try {
       await this.authentication.login();
       this.errorMessage = '';
-      this.goToApp();
     } catch (e) {
       this.errorMessage = e.message || 'Unknown login error';
       console.error(e);
     }
-  }
-
-  private goToApp() {
-    this.navController.navigateRoot('/tabs/home');
   }
 
   private async tryUnlock() {

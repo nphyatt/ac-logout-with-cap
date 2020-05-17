@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { IonicAuth } from '@ionic-enterprise/auth';
+import { Subject, Observable } from 'rxjs';
 
 import { cordovaAzureConfig, webAzureConfig } from '@env/environment';
 import { VaultService } from '../vault/vault.service';
@@ -12,16 +12,21 @@ import { User } from '@app/models';
 })
 export class AuthenticationService extends IonicAuth {
   private vaultService: VaultService;
-  private router: Router;
+
+  private _changed: Subject<boolean>;
+  get changed(): Observable<boolean> {
+    return this._changed.asObservable();
+  }
 
   // @ts-ignore
-  constructor(vaultService: VaultService, router: Router, platform: Platform) {
+  constructor(vaultService: VaultService, platform: Platform) {
     const isCordovaApp = platform.is('cordova');
     const config = isCordovaApp ? cordovaAzureConfig : webAzureConfig;
     config.tokenStorageProvider = vaultService;
     super(config);
     this.vaultService = vaultService;
-    this.router = router;
+    this._changed = new Subject();
+    vaultService.lockChanged.subscribe(locked => this._changed.next(!locked));
   }
 
   async login(): Promise<void> {
@@ -30,6 +35,7 @@ export class AuthenticationService extends IonicAuth {
 
     try {
       await super.login();
+      this._changed.next(true);
     } catch (err) {
       // This is to handle the password reset case for Azure AD
       //  This only applicable to Azure AD.
@@ -48,14 +54,13 @@ export class AuthenticationService extends IonicAuth {
   }
 
   async isAuthenticated(): Promise<boolean> {
-    // you could also automatically attempt to unlock the vault if desired
     const isVaultLocked = await this.vaultService.isLocked();
     return !isVaultLocked && (await super.isAuthenticated());
   }
 
   async onLogout(): Promise<void> {
     await this.vaultService.logout();
-    this.router.navigate(['login']);
+    this._changed.next(false);
   }
 
   async getUserInfo(): Promise<User | undefined> {

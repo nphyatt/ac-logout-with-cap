@@ -152,13 +152,4 @@ describe('IdentityService', () => {
       expect(await vaultService.onPasscodeRequest(true)).toEqual('');
     });
   });
-
-  describe('on vault locked', () => {
-    it('navigates to the login page', () => {
-      const router = TestBed.inject(Router);
-      vaultService.onVaultLocked();
-      expect(router.navigate).toHaveBeenCalledTimes(1);
-      expect(router.navigate).toHaveBeenCalledWith(['login']);
-    });
-  });
 });

@@ -1,5 +1,7 @@
+import { Subject } from 'rxjs';
+
 export function createVaultServiceMock() {
-  return jasmine.createSpyObj('VaultService', {
+  const vault = jasmine.createSpyObj('VaultService', {
     getAuthMode: Promise.resolve(),
     getBiometricType: Promise.resolve(),
     hasStoredSession: Promise.resolve(false),
@@ -17,4 +19,6 @@ export function createVaultServiceMock() {
     setDesiredAuthMode: Promise.resolve(),
     unlock: Promise.resolve()
   });
+  vault.lockChanged = new Subject();
+  return vault;
 }

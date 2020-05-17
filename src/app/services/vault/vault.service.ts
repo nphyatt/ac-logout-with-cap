@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { ModalController, Platform } from '@ionic/angular';
 import { AuthMode, IonicIdentityVaultUser, IonicNativeAuthPlugin } from '@ionic-enterprise/identity-vault';
@@ -7,15 +6,21 @@ import { AuthMode, IonicIdentityVaultUser, IonicNativeAuthPlugin } from '@ionic-
 import { PinDialogComponent } from '@app/pin-dialog/pin-dialog.component';
 import { BrowserAuthPlugin } from '../browser-auth/browser-auth.plugin';
 import { SettingsService } from '../settings/settings.service';
+import { Subject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class VaultService extends IonicIdentityVaultUser<any> {
+  private _lockChanged: Subject<boolean>;
+
+  get lockChanged(): Observable<boolean> {
+    return this._lockChanged.asObservable();
+  }
+
   constructor(
     private browserAuthPlugin: BrowserAuthPlugin,
     private modalController: ModalController,
-    private router: Router,
     private plt: Platform,
     private settings: SettingsService
   ) {
@@ -31,6 +36,7 @@ export class VaultService extends IonicIdentityVaultUser<any> {
       allowSystemPinFallback: true,
       shouldClearVaultAfterTooManyFailedAttempts: false
     });
+    this._lockChanged = new Subject();
   }
 
   async setDesiredAuthMode(): Promise<void> {
@@ -72,8 +78,12 @@ export class VaultService extends IonicIdentityVaultUser<any> {
     return data || '';
   }
 
+  onVaultUnlocked() {
+    this._lockChanged.next(false);
+  }
+
   onVaultLocked() {
-    this.router.navigate(['login']);
+    this._lockChanged.next(true);
   }
 
   getPlugin(): IonicNativeAuthPlugin {

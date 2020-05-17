@@ -5,6 +5,8 @@ import { NavController, Platform } from '@ionic/angular';
 import { Plugins, StatusBarStyle } from '@capacitor/core';
 
 import { AppComponent } from './app.component';
+import { VaultService } from './services/vault/vault.service';
+import { createVaultServiceMock } from './services/vault/vault.service.mock';
 import { createPlatformMock, createNavControllerMock } from '../../test/mocks';
 
 describe('AppComponent', () => {
@@ -21,7 +23,8 @@ describe('AppComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
         { provide: NavController, useFactory: createNavControllerMock },
-        { provide: Platform, useFactory: createPlatformMock }
+        { provide: Platform, useFactory: createPlatformMock },
+        { provide: VaultService, useFactory: createVaultServiceMock }
       ]
     }).compileComponents();
   }));
