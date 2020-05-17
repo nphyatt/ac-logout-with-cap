@@ -53,10 +53,10 @@ describe('LoginPage', () => {
 
         it('gets the biometric type', fakeAsync(() => {
           vaultService.isBiometricsAvailable.and.returnValue(Promise.resolve(true));
-          vaultService.getBiometricType.and.returnValue(Promise.resolve('blood'));
+          vaultService.supportedBiometricTypes.and.returnValue(Promise.resolve('Blood, First Born Child'));
           component.ionViewWillEnter();
           tick();
-          expect(component.loginType).toEqual('blood');
+          expect(component.loginType).toEqual('Blood, First Born Child');
         }));
       });
 
@@ -65,11 +65,11 @@ describe('LoginPage', () => {
           vaultService.hasStoredSession.and.returnValue(Promise.resolve(false));
         });
 
-        it('does not get the biometric type', fakeAsync(() => {
-          vaultService.getBiometricType.and.returnValue(Promise.resolve('blood'));
+        it('does not get the biometric types', fakeAsync(() => {
+          vaultService.supportedBiometricTypes.and.returnValue(Promise.resolve('blood'));
           component.ionViewWillEnter();
           tick();
-          expect(vaultService.getBiometricType).not.toHaveBeenCalled();
+          expect(vaultService.supportedBiometricTypes).not.toHaveBeenCalled();
           expect(component.loginType).toEqual('');
         }));
       });

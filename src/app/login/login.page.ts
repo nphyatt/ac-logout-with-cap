@@ -66,12 +66,12 @@ export class LoginPage {
       const authMode = await this.vaultService.getAuthMode();
       switch (authMode) {
         case AuthMode.BiometricAndPasscode:
-          this.loginType = await this.translateBiometricType();
+          this.loginType = await this.vaultService.supportedBiometricTypes();
           this.loginType += ' (Passcode Fallback)';
           break;
         case AuthMode.BiometricOnly:
           const displayVaultLogin = await this.vaultService.isBiometricsAvailable();
-          this.loginType = displayVaultLogin ? await this.translateBiometricType() : '';
+          this.loginType = displayVaultLogin ? await this.vaultService.supportedBiometricTypes() : '';
           break;
         case AuthMode.PasscodeOnly:
           this.loginType = 'Passcode';
@@ -83,17 +83,5 @@ export class LoginPage {
     } else {
       this.loginType = '';
     }
-  }
-
-  private async translateBiometricType(): Promise<string> {
-    const type = await this.vaultService.getBiometricType();
-    switch (type) {
-      case 'touchID':
-        return 'TouchID';
-      case 'faceID':
-        return 'FaceID';
-    }
-
-    return type;
   }
 }

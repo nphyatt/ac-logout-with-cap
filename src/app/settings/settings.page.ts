@@ -23,7 +23,7 @@ export class SettingsPage implements OnInit {
   async ngOnInit() {
     await this.vaultService.ready();
     await this.setAuthModeFlags();
-    const type = await this.vaultService.getBiometricType();
+    const type = await this.vaultService.supportedBiometricTypes();
     this.biometricType = this.translateBiometricType(type);
   }
 

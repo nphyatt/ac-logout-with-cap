@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 export function createVaultServiceMock() {
   const vault = jasmine.createSpyObj('VaultService', {
     getAuthMode: Promise.resolve(),
-    getBiometricType: Promise.resolve(),
+    supportedBiometricTypes: Promise.resolve(''),
     hasStoredSession: Promise.resolve(false),
     isBiometricsAvailable: Promise.resolve(false),
     isBiometricsEnabled: Promise.resolve(false),

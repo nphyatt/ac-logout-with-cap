@@ -86,6 +86,26 @@ export class VaultService extends IonicIdentityVaultUser<any> {
     this._lockChanged.next(true);
   }
 
+  async supportedBiometricTypes(): Promise<string> {
+    let result = '';
+    const types = await this.getAvailableHardware();
+    if (types) {
+      types.forEach(t => (result += `${result ? ', ' : ''}${this.translateBiometricType(t)}`));
+    }
+    return result;
+  }
+
+  private translateBiometricType(type: string): string {
+    switch (type) {
+      case 'fingerprint':
+        return 'Finger Print';
+      case 'face':
+        return 'Face Match';
+      case 'iris':
+        return 'Iris Scan';
+    }
+  }
+
   getPlugin(): IonicNativeAuthPlugin {
     if (this.plt.is('cordova')) {
       return super.getPlugin();

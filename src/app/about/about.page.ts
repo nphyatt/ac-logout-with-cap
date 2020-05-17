@@ -19,7 +19,7 @@ export class AboutPage {
   async ionViewDidEnter() {
     this.user = await this.authentication.getUserInfo();
     this.authMode = AuthMode[await this.vaultService.getAuthMode()];
-    this.bioType = await this.vaultService.getBiometricType();
+    this.bioType = await this.vaultService.supportedBiometricTypes();
   }
 
   logout() {

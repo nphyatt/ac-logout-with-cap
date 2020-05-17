@@ -62,12 +62,12 @@ describe('AboutPage', () => {
       expect(component.authMode).toEqual('InMemoryOnly');
     });
 
-    it('gets the auth mode', async () => {
+    it('gets the biometric types', async () => {
       const vaultService = TestBed.inject(VaultService);
-      (vaultService as any).getBiometricType.and.returnValue(Promise.resolve('FaceID'));
+      (vaultService as any).supportedBiometricTypes.and.returnValue(Promise.resolve('Blood, First Born Child'));
       await component.ionViewDidEnter();
-      expect(vaultService.getBiometricType).toHaveBeenCalledTimes(1);
-      expect(component.bioType).toEqual('FaceID');
+      expect(vaultService.supportedBiometricTypes).toHaveBeenCalledTimes(1);
+      expect(component.bioType).toEqual('Blood, First Born Child');
     });
   });
 
