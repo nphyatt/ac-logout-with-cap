@@ -1,25 +1,25 @@
 import { Component } from '@angular/core';
 
 import { Platform } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { Plugins, StatusBarStyle } from '@capacitor/core';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html'
 })
 export class AppComponent {
-  constructor(
-    private platform: Platform,
-    private splashScreen: SplashScreen,
-    private statusBar: StatusBar
-  ) {
+  constructor(private platform: Platform) {
     this.initializeApp();
   }
 
   async initializeApp() {
-    await this.platform.ready();
-    this.statusBar.styleDefault();
-    this.splashScreen.hide();
+    const { SplashScreen, StatusBar } = Plugins;
+    if (this.platform.is('hybrid')) {
+      await SplashScreen.hide();
+      await StatusBar.setStyle({ style: StatusBarStyle.Light });
+      if (this.platform.is('android')) {
+        StatusBar.setBackgroundColor({ color: '#3171e0' });
+      }
+    }
   }
 }

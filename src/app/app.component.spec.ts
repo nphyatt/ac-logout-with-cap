@@ -1,39 +1,35 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { TestBed, async } from '@angular/core/testing';
+import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { NavController, Platform } from '@ionic/angular';
 
-import { Platform } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { Plugins, StatusBarStyle } from '@capacitor/core';
 
 import { AppComponent } from './app.component';
-import { VaultService } from '@app/services';
-import { createVaultServiceMock } from '@app/services/mocks';
+import { createPlatformMock, createNavControllerMock } from '../../test/mocks';
 
 describe('AppComponent', () => {
-  let identity;
-  let platformReadySpy;
-  let platformSpy;
-  let splashScreenSpy;
-  let statusBarSpy;
+  let originalSplashScreen;
+  let originalStatusBar;
 
   beforeEach(async(() => {
-    identity = createVaultServiceMock();
-    statusBarSpy = jasmine.createSpyObj('StatusBar', ['styleDefault']);
-    splashScreenSpy = jasmine.createSpyObj('SplashScreen', ['hide']);
-    platformReadySpy = Promise.resolve();
-    platformSpy = jasmine.createSpyObj('Platform', { ready: platformReadySpy });
-
+    originalSplashScreen = Plugins.SplashScreen;
+    originalStatusBar = Plugins.StatusBar;
+    Plugins.StatusBar = jasmine.createSpyObj('StatusBar', ['setStyle', 'setBackgroundColor']);
+    Plugins.SplashScreen = jasmine.createSpyObj('SplashScreen', ['hide']);
     TestBed.configureTestingModule({
       declarations: [AppComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
-        { provide: VaultService, useValue: identity },
-        { provide: StatusBar, useValue: statusBarSpy },
-        { provide: SplashScreen, useValue: splashScreenSpy },
-        { provide: Platform, useValue: platformSpy }
+        { provide: NavController, useFactory: createNavControllerMock },
+        { provide: Platform, useFactory: createPlatformMock }
       ]
     }).compileComponents();
   }));
+
+  afterEach(() => {
+    Plugins.StatusBar = originalStatusBar;
+    Plugins.SplashScreen = originalSplashScreen;
+  });
 
   it('should create the app', () => {
     const fixture = TestBed.createComponent(AppComponent);
@@ -41,11 +37,63 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should initialize the app', async () => {
-    TestBed.createComponent(AppComponent);
-    expect(platformSpy.ready).toHaveBeenCalled();
-    await platformReadySpy;
-    expect(statusBarSpy.styleDefault).toHaveBeenCalled();
-    expect(splashScreenSpy.hide).toHaveBeenCalled();
+  describe('initialization', () => {
+    let platform: Platform;
+    beforeEach(() => {
+      platform = TestBed.inject(Platform);
+    });
+
+    describe('on a mobile device', () => {
+      beforeEach(() => {
+        (platform.is as any).withArgs('hybrid').and.returnValue(false);
+      });
+
+      it('does not hide the splash screen', fakeAsync(() => {
+        TestBed.createComponent(AppComponent);
+        tick();
+        expect(Plugins.SplashScreen.hide).not.toHaveBeenCalled();
+      }));
+
+      it('does not set the status bar style', fakeAsync(() => {
+        TestBed.createComponent(AppComponent);
+        tick();
+        expect(Plugins.StatusBar.setStyle).not.toHaveBeenCalled();
+      }));
+    });
+
+    describe('on a mobile device', () => {
+      beforeEach(() => {
+        (platform.is as any).withArgs('hybrid').and.returnValue(true);
+      });
+
+      it('hides the splash screen', fakeAsync(() => {
+        TestBed.createComponent(AppComponent);
+        tick();
+        expect(Plugins.SplashScreen.hide).toHaveBeenCalledTimes(1);
+      }));
+
+      it('sets the status bar style to light', fakeAsync(() => {
+        TestBed.createComponent(AppComponent);
+        tick();
+        expect(Plugins.StatusBar.setStyle).toHaveBeenCalledTimes(1);
+        expect(Plugins.StatusBar.setStyle).toHaveBeenCalledWith({
+          style: StatusBarStyle.Light
+        });
+      }));
+
+      it('does not set the status bar background color by default', fakeAsync(() => {
+        TestBed.createComponent(AppComponent);
+        tick();
+        expect(Plugins.StatusBar.setBackgroundColor).not.toHaveBeenCalled();
+      }));
+
+      it('sets the status bar background for android', fakeAsync(() => {
+        (platform.is as any).withArgs('android').and.returnValue(true);
+        TestBed.createComponent(AppComponent);
+        tick();
+        expect(Plugins.StatusBar.setBackgroundColor).toHaveBeenCalledTimes(1);
+        expect(Plugins.StatusBar.setBackgroundColor).toHaveBeenCalledWith({ color: '#3171e0' });
+      }));
+    });
   });
 });

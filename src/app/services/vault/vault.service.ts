@@ -20,11 +20,16 @@ export class VaultService extends IonicIdentityVaultUser<any> {
     private settings: SettingsService
   ) {
     super(plt, {
+      androidPromptTitle: 'Auth Connect w/ Identity Vault Demo',
+      androidPromptSubtitle: 'Demo All the Things!',
+      androidPromptDescription: 'You need to unlock me',
       restoreSessionOnReady: false,
       unlockOnReady: false,
       unlockOnAccess: true,
       lockAfter: 5000,
-      hideScreenOnBackground: true
+      hideScreenOnBackground: true,
+      allowSystemPinFallback: true,
+      shouldClearVaultAfterTooManyFailedAttempts: false
     });
   }
 

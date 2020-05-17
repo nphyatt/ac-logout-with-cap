@@ -46,9 +46,12 @@ describe('AboutPage', () => {
           id: '42-73'
         })
       );
-      expect(component.getUserInfo()).toEqual('user is undefined');
+      expect(component.user).toBeFalsy();
       await component.ionViewDidEnter();
-      expect(component.getUserInfo()).toEqual('Email: test@test.com UserID: 42-73');
+      expect(component.user).toEqual({
+        email: 'test@test.com',
+        id: '42-73'
+      });
     });
 
     it('gets the auth mode', async () => {

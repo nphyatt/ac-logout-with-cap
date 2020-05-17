@@ -10,22 +10,11 @@ import { User } from '@app/models';
   styleUrls: ['about.page.scss']
 })
 export class AboutPage {
-  private user: User;
+  user: User;
   authMode: string;
   bioType: string;
 
-  constructor(
-    private authentication: AuthenticationService,
-    private vaultService: VaultService,
-  ) {}
-
-  getUserInfo() {
-    if (this.user === undefined) {
-      return 'user is undefined';
-    } else {
-      return `Email: ${this.user.email} UserID: ${this.user.id}`;
-    }
-  }
+  constructor(private authentication: AuthenticationService, private vaultService: VaultService) {}
 
   async ionViewDidEnter() {
     this.user = await this.authentication.getUserInfo();
