@@ -1,13 +1,17 @@
 import { Injectable } from '@angular/core';
 
 import { ModalController, Platform } from '@ionic/angular';
-import { AuthMode, IonicIdentityVaultUser, IonicNativeAuthPlugin } from '@ionic-enterprise/identity-vault';
+import {
+  AuthMode,
+  IonicIdentityVaultUser,
+  IonicNativeAuthPlugin,
+  VaultErrorCodes
+} from '@ionic-enterprise/identity-vault';
 
 import { PinDialogComponent } from '@app/pin-dialog/pin-dialog.component';
 import { BrowserAuthPlugin } from '../browser-auth/browser-auth.plugin';
 import { SettingsService } from '../settings/settings.service';
 import { Subject, Observable } from 'rxjs';
-import { VaultErrorCodes } from 'plugins/@ionic-enterprise/identity-vault/dist/esm';
 
 @Injectable({
   providedIn: 'root'
@@ -76,11 +80,12 @@ export class VaultService extends IonicIdentityVaultUser<any> {
     });
     dlg.present();
     const { data, role } = await dlg.onDidDismiss();
-    if (role === 'cancel')
+    if (role === 'cancel') {
       throw {
         code: VaultErrorCodes.UserCanceledInteraction,
         message: 'User has canceled supplying the application passcode'
       };
+    }
     return Promise.resolve(data || '');
   }
 
