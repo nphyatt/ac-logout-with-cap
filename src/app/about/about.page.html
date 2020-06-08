@@ -10,18 +10,42 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-text-center ion-padding">
-  <img src="assets/img/appicon.svg" />
-  <h1>Ionic Auth Connect w/ ID Vault</h1>
-  <h2>Demo Application</h2>
-  <h3>Capacitor: 2.1.0</h3>
-  <h3>Auth Connect: 2.1.0</h3>
-  <h3>Identity Vault: 4.2.0</h3>
-  <h4>Authentication Mode: {{authMode}}</h4>
-  <h4>Biometrics Type: {{bioType}}</h4>
-  <h3>Current User:</h3>
-  <div>
-    <div>Email: {{user && user.email}}</div>
-    <div>id: {{user && user.id}}</div>
+<ion-content>
+  <div class="ion-text-center">
+    <img src="assets/img/appicon.svg" />
+    <h1>Ionic Auth Connect w/ ID Vault</h1>
+    <h2>Demo Application</h2>
   </div>
+
+  <ion-list>
+    <ion-list-header>Versions</ion-list-header>
+    <ion-item>
+      <ion-label>Capacitor</ion-label>
+      <ion-note slot="end">2.1.2</ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-label>Auth Connect</ion-label>
+      <ion-note slot="end">2.2.1</ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-label>Identity Vault</ion-label>
+      <ion-note slot="end">4.2.1</ion-note>
+    </ion-item>
+
+    <ion-list-header>System</ion-list-header>
+    <ion-item>
+      <ion-label>Authentication Mode</ion-label>
+      <ion-note slot="end">{{authMode}}</ion-note>
+    </ion-item>
+    <ion-item>
+      <ion-label>Biometric Type</ion-label>
+      <ion-note slot="end">{{bioType}}</ion-note>
+    </ion-item>
+
+    <ion-list-header>User</ion-list-header>
+    <ion-item>
+      <ion-label>Email</ion-label>
+      <ion-note slot="end">{{user && user.email}}</ion-note>
+    </ion-item>
+  </ion-list>
 </ion-content>
