@@ -5,7 +5,10 @@ import { NavController } from '@ionic/angular';
 import { HomePage } from './home.page';
 import { AuthenticationService, TeaCategoriesService } from '@app/services';
 import { createNavControllerMock } from '@test/mocks';
-import { createAuthenticationServiceMock, createTeaCategoriesServiceMock } from '@app/services/mocks';
+import {
+  createAuthenticationServiceMock,
+  createTeaCategoriesServiceMock,
+} from '@app/services/mocks';
 
 describe('HomePage', () => {
   let component: HomePage;
@@ -24,8 +27,8 @@ describe('HomePage', () => {
       providers: [
         { provide: AuthenticationService, useValue: authentication },
         { provide: NavController, useValue: navController },
-        { provide: TeaCategoriesService, useValue: teaCategories }
-      ]
+        { provide: TeaCategoriesService, useValue: teaCategories },
+      ],
     }).compileComponents();
   }));
 

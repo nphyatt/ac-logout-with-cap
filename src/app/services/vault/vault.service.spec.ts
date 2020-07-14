@@ -1,5 +1,8 @@
 import { TestBed, inject } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { Router } from '@angular/router';
 
 import { AuthMode } from '@ionic-enterprise/identity-vault';
@@ -11,10 +14,17 @@ import {
   createPlatformMock,
   createRouterMock,
   createStorageMock,
-  createOverlayElementMock
+  createOverlayElementMock,
 } from '@test/mocks';
-import { BrowserAuthService, VaultService, SettingsService } from '@app/services';
-import { createSettingsServiceMock, createBrowserAuthServiceMock } from '@app/services/mocks';
+import {
+  BrowserAuthService,
+  VaultService,
+  SettingsService,
+} from '@app/services';
+import {
+  createSettingsServiceMock,
+  createBrowserAuthServiceMock,
+} from '@app/services/mocks';
 import { PinDialogComponent } from '@app/pin-dialog/pin-dialog.component';
 
 describe('IdentityService', () => {
@@ -31,14 +41,17 @@ describe('IdentityService', () => {
         VaultService,
         {
           provide: ModalController,
-          useFactory: () => createOverlayControllerMock('Modal', modal)
+          useFactory: () => createOverlayControllerMock('Modal', modal),
         },
-        { provide: BrowserAuthService, useFactory: createBrowserAuthServiceMock },
+        {
+          provide: BrowserAuthService,
+          useFactory: createBrowserAuthServiceMock,
+        },
         { provide: Platform, useFactory: createPlatformMock },
         { provide: Router, useFactory: createRouterMock },
         { provide: SettingsService, useFactory: createSettingsServiceMock },
-        { provide: Storage, useFactory: createStorageMock }
-      ]
+        { provide: Storage, useFactory: createStorageMock },
+      ],
     });
 
     httpTestingController = TestBed.inject(HttpTestingController);
@@ -91,7 +104,9 @@ describe('IdentityService', () => {
     });
 
     it('sets secure storage mode', async () => {
-      settingsService.useSecureStorageMode.and.returnValue(Promise.resolve(true));
+      settingsService.useSecureStorageMode.and.returnValue(
+        Promise.resolve(true),
+      );
       await vaultService.setDesiredAuthMode();
       expect(vault.setSecureStorageModeEnabled).toHaveBeenCalledTimes(1);
       expect(vault.setSecureStorageModeEnabled).toHaveBeenCalledWith(true);
@@ -116,8 +131,8 @@ describe('IdentityService', () => {
         backdropDismiss: false,
         component: PinDialogComponent,
         componentProps: {
-          setPasscodeMode: false
-        }
+          setPasscodeMode: false,
+        },
       });
     });
 
@@ -128,8 +143,8 @@ describe('IdentityService', () => {
         backdropDismiss: false,
         component: PinDialogComponent,
         componentProps: {
-          setPasscodeMode: true
-        }
+          setPasscodeMode: true,
+        },
       });
     });
 
@@ -142,10 +157,12 @@ describe('IdentityService', () => {
       modal.onDidDismiss.and.returnValue(
         Promise.resolve({
           role: 'dismiss',
-          data: 'thisisthePIN'
-        })
+          data: 'thisisthePIN',
+        }),
       );
-      expect(await vaultService.onPasscodeRequest(true)).toEqual('thisisthePIN');
+      expect(await vaultService.onPasscodeRequest(true)).toEqual(
+        'thisisthePIN',
+      );
     });
 
     it('returns an empty string if there is no data returned from the modal', async () => {

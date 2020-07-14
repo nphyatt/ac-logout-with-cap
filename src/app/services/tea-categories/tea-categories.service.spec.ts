@@ -1,5 +1,8 @@
 import { TestBed, inject } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 
 import { TeaCategory } from '@app/models';
 import { TeaCategoriesService } from './tea-categories.service';
@@ -15,7 +18,7 @@ describe('TeaCategoriesService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [TeaCategoriesService]
+      providers: [TeaCategoriesService],
     });
 
     httpTestingController = TestBed.inject(HttpTestingController);
@@ -36,8 +39,12 @@ describe('TeaCategoriesService', () => {
     });
 
     it('gets all of the tea categories', () => {
-      teaCategoriesService.getAll().subscribe(c => expect(c).toEqual(testTeaCategories));
-      const req = httpTestingController.expectOne(`${environment.dataService}/tea-categories`);
+      teaCategoriesService
+        .getAll()
+        .subscribe(c => expect(c).toEqual(testTeaCategories));
+      const req = httpTestingController.expectOne(
+        `${environment.dataService}/tea-categories`,
+      );
       expect(req.request.method).toEqual('GET');
       req.flush(categories);
       httpTestingController.verify();
@@ -51,8 +58,12 @@ describe('TeaCategoriesService', () => {
     });
 
     it('gets a specific tea category', () => {
-      teaCategoriesService.get(3).subscribe(c => expect(c).toEqual(testTeaCategories[2]));
-      const req = httpTestingController.expectOne(`${environment.dataService}/tea-categories/3`);
+      teaCategoriesService
+        .get(3)
+        .subscribe(c => expect(c).toEqual(testTeaCategories[2]));
+      const req = httpTestingController.expectOne(
+        `${environment.dataService}/tea-categories/3`,
+      );
       expect(req.request.method).toEqual('GET');
       req.flush(categories[2]);
       httpTestingController.verify();
@@ -66,8 +77,12 @@ describe('TeaCategoriesService', () => {
     });
 
     it('saves the specified tea category', () => {
-      teaCategoriesService.save(testTeaCategories[3]).subscribe(c => expect(c).toEqual(testTeaCategories[3]));
-      const req = httpTestingController.expectOne(`${environment.dataService}/tea-categories/4`);
+      teaCategoriesService
+        .save(testTeaCategories[3])
+        .subscribe(c => expect(c).toEqual(testTeaCategories[3]));
+      const req = httpTestingController.expectOne(
+        `${environment.dataService}/tea-categories/4`,
+      );
       expect(req.request.method).toEqual('POST');
       req.flush(testTeaCategories[3]);
       httpTestingController.verify();
@@ -75,14 +90,20 @@ describe('TeaCategoriesService', () => {
 
     it('triggers another getAll', () => {
       teaCategoriesService.getAll().subscribe();
-      const getReq = httpTestingController.expectOne(`${environment.dataService}/tea-categories`);
+      const getReq = httpTestingController.expectOne(
+        `${environment.dataService}/tea-categories`,
+      );
       getReq.flush(categories);
 
       teaCategoriesService.save(testTeaCategories[3]).subscribe();
-      const req = httpTestingController.expectOne(`${environment.dataService}/tea-categories/4`);
+      const req = httpTestingController.expectOne(
+        `${environment.dataService}/tea-categories/4`,
+      );
       req.flush(testTeaCategories[3]);
 
-      const secondGetReq = httpTestingController.expectOne(`${environment.dataService}/tea-categories`);
+      const secondGetReq = httpTestingController.expectOne(
+        `${environment.dataService}/tea-categories`,
+      );
       secondGetReq.flush(categories);
       httpTestingController.verify();
 

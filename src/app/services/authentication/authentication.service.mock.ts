@@ -6,6 +6,6 @@ export function createAuthenticationServiceMock() {
     logout: Promise.resolve(),
     isAuthenticated: Promise.resolve(false),
     onLogout: Promise.resolve(),
-    getUserInfo: Promise.resolve()
+    getUserInfo: Promise.resolve(),
   });
 }

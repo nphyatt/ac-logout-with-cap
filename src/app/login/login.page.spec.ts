@@ -1,11 +1,20 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import {
+  async,
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { AuthMode } from '@ionic-enterprise/identity-vault';
 
 import { AuthenticationService, VaultService } from '@app/services';
-import { createVaultServiceMock, createAuthenticationServiceMock } from '@app/services/mocks';
+import {
+  createVaultServiceMock,
+  createAuthenticationServiceMock,
+} from '@app/services/mocks';
 import { LoginPage } from './login.page';
 
 describe('LoginPage', () => {
@@ -23,9 +32,9 @@ describe('LoginPage', () => {
       imports: [FormsModule, IonicModule],
       providers: [
         { provide: AuthenticationService, useValue: authentication },
-        { provide: VaultService, useValue: vaultService }
+        { provide: VaultService, useValue: vaultService },
       ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
   }));
 
@@ -43,7 +52,9 @@ describe('LoginPage', () => {
     describe('with biometrics enabled', () => {
       beforeEach(() => {
         vaultService.isBiometricsEnabled.and.returnValue(Promise.resolve(true));
-        vaultService.getAuthMode.and.returnValue(Promise.resolve(AuthMode.BiometricOnly));
+        vaultService.getAuthMode.and.returnValue(
+          Promise.resolve(AuthMode.BiometricOnly),
+        );
       });
 
       describe('with a stored token', () => {
@@ -52,8 +63,12 @@ describe('LoginPage', () => {
         });
 
         it('gets the biometric type', fakeAsync(() => {
-          vaultService.isBiometricsAvailable.and.returnValue(Promise.resolve(true));
-          vaultService.supportedBiometricTypes.and.returnValue(Promise.resolve('Blood, First Born Child'));
+          vaultService.isBiometricsAvailable.and.returnValue(
+            Promise.resolve(true),
+          );
+          vaultService.supportedBiometricTypes.and.returnValue(
+            Promise.resolve('Blood, First Born Child'),
+          );
           component.ionViewWillEnter();
           tick();
           expect(component.loginType).toEqual('Blood, First Born Child');
@@ -66,7 +81,9 @@ describe('LoginPage', () => {
         });
 
         it('does not get the biometric types', fakeAsync(() => {
-          vaultService.supportedBiometricTypes.and.returnValue(Promise.resolve('blood'));
+          vaultService.supportedBiometricTypes.and.returnValue(
+            Promise.resolve('blood'),
+          );
           component.ionViewWillEnter();
           tick();
           expect(vaultService.supportedBiometricTypes).not.toHaveBeenCalled();

@@ -7,7 +7,7 @@ import { environment } from '@env/environment';
 import { TeaCategory } from '@app/models';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TeaCategoriesService {
   private changed: BehaviorSubject<void>;
@@ -20,15 +20,15 @@ export class TeaCategoriesService {
     return this.changed.pipe(
       flatMap(() =>
         this.http.get<Array<TeaCategory>>(
-          `${environment.dataService}/tea-categories`
-        )
-      )
+          `${environment.dataService}/tea-categories`,
+        ),
+      ),
     );
   }
 
   get(id: number): Observable<TeaCategory> {
     return this.http.get<TeaCategory>(
-      `${environment.dataService}/tea-categories/${id}`
+      `${environment.dataService}/tea-categories/${id}`,
     );
   }
 
@@ -36,7 +36,7 @@ export class TeaCategoriesService {
     return this.http
       .post<TeaCategory>(
         `${environment.dataService}/tea-categories/${teaCategory.id}`,
-        teaCategory
+        teaCategory,
       )
       .pipe(tap(() => this.changed.next(null)));
   }

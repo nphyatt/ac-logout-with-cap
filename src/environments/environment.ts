@@ -6,7 +6,8 @@ export const cordovaAzureConfig: IonicAuthOptions = {
   // This is the expected redirectUri from the login page.
   redirectUri: 'myapp://callback',
   // requested scopes from provider
-  scope: 'openid offline_access email profile https://vikingsquad.onmicrosoft.com/api/Hello.Read',
+  scope:
+    'openid offline_access email profile https://vikingsquad.onmicrosoft.com/api/Hello.Read',
   // The discovery url for the provider
   discoveryUrl:
     'https://vikingsquad.b2clogin.com/vikingsquad.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1_Signup_Signin',
@@ -26,7 +27,7 @@ export const cordovaAzureConfig: IonicAuthOptions = {
   authConfig: 'azure',
   // This sets the color of the toolbar at the top of the login webview for android.
   //  Red is just to call attention to what is being set (you don't want to use Red)
-  androidToolbarColor: 'Red'
+  androidToolbarColor: 'Red',
 };
 
 export const webAzureConfig: IonicAuthOptions = {
@@ -35,7 +36,8 @@ export const webAzureConfig: IonicAuthOptions = {
   // This is the expected redirectUri from the login page.
   redirectUri: 'http://localhost:8100/login',
   // requested scopes from provider
-  scope: 'openid offline_access email profile https://vikingsquad.onmicrosoft.com/api/Hello.Read',
+  scope:
+    'openid offline_access email profile https://vikingsquad.onmicrosoft.com/api/Hello.Read',
   // The discovery url for the provider
   discoveryUrl:
     'https://vikingsquad.b2clogin.com/vikingsquad.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1_Signup_Signin',
@@ -46,11 +48,11 @@ export const webAzureConfig: IonicAuthOptions = {
   // The platform which we are running on
   platform: 'web',
   // The auth provider.
-  authConfig: 'azure'
+  authConfig: 'azure',
 };
 
 export const environment = {
   production: false,
   // dataService: 'http://localhost:5000' // switch to this to run local
-  dataService: 'https://cs-demo-api.herokuapp.com'
+  dataService: 'https://cs-demo-api.herokuapp.com',
 };

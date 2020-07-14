@@ -23,10 +23,10 @@ describe('EditTeaCategoryPage', () => {
         { provide: NavController, useFactory: createNavControllerMock },
         {
           provide: TeaCategoriesService,
-          useFactory: createTeaCategoriesServiceMock
-        }
+          useFactory: createTeaCategoriesServiceMock,
+        },
       ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA]
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
   }));
 
@@ -64,8 +64,8 @@ describe('EditTeaCategoryPage', () => {
         of({
           id: 42,
           name: 'Doug',
-          description: 'The long dark teamtime of the soul'
-        })
+          description: 'The long dark teamtime of the soul',
+        }),
       );
       fixture.detectChanges();
       expect(component.name).toEqual('Doug');
@@ -79,11 +79,13 @@ describe('EditTeaCategoryPage', () => {
         of({
           id: 42,
           name: 'Doug',
-          description: 'The long dark teamtime of the soul'
-        })
+          description: 'The long dark teamtime of the soul',
+        }),
       );
       fixture.detectChanges();
-      expect(component.description).toEqual('The long dark teamtime of the soul');
+      expect(component.description).toEqual(
+        'The long dark teamtime of the soul',
+      );
     });
   });
 
@@ -94,8 +96,8 @@ describe('EditTeaCategoryPage', () => {
         of({
           id: 42,
           name: 'Doug',
-          description: 'The long dark teamtime of the soul'
-        })
+          description: 'The long dark teamtime of the soul',
+        }),
       );
       fixture.detectChanges();
     });
@@ -109,7 +111,7 @@ describe('EditTeaCategoryPage', () => {
       expect(cats.save).toHaveBeenCalledWith({
         id: 42,
         name: 'Anthony',
-        description: 'A clockwork orange pekoe'
+        description: 'A clockwork orange pekoe',
       });
     });
 

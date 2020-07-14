@@ -9,7 +9,7 @@ describe('SettingsService', () => {
   let storage;
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [{ provide: Storage, useFactory: createStorageMock }]
+      providers: [{ provide: Storage, useFactory: createStorageMock }],
     });
     storage = TestBed.inject(Storage);
     service = TestBed.inject(SettingsService);
@@ -28,9 +28,11 @@ describe('SettingsService', () => {
 
     [true, false].forEach(value =>
       it('returns the currently set value', async () => {
-        storage.get.withArgs('useBiometrics').and.returnValue(Promise.resolve(value));
+        storage.get
+          .withArgs('useBiometrics')
+          .and.returnValue(Promise.resolve(value));
         expect(await service.useBiometrics()).toEqual(value);
-      })
+      }),
     );
   });
 
@@ -43,9 +45,11 @@ describe('SettingsService', () => {
 
     [true, false].forEach(value =>
       it('returns the currently set value', async () => {
-        storage.get.withArgs('usePasscode').and.returnValue(Promise.resolve(value));
+        storage.get
+          .withArgs('usePasscode')
+          .and.returnValue(Promise.resolve(value));
         expect(await service.usePasscode()).toEqual(value);
-      })
+      }),
     );
   });
 
@@ -58,9 +62,11 @@ describe('SettingsService', () => {
 
     [true, false].forEach(value =>
       it('returns the currently set value', async () => {
-        storage.get.withArgs('useSecureStorageMode').and.returnValue(Promise.resolve(value));
+        storage.get
+          .withArgs('useSecureStorageMode')
+          .and.returnValue(Promise.resolve(value));
         expect(await service.useSecureStorageMode()).toEqual(value);
-      })
+      }),
     );
   });
 
@@ -69,36 +75,45 @@ describe('SettingsService', () => {
       {
         useBiometrics: true,
         usePasscode: false,
-        useSecureStorageMode: false
+        useSecureStorageMode: false,
       },
       {
         useBiometrics: true,
         usePasscode: true,
-        useSecureStorageMode: false
+        useSecureStorageMode: false,
       },
       {
         useBiometrics: false,
         usePasscode: false,
-        useSecureStorageMode: true
+        useSecureStorageMode: true,
       },
       {
         useBiometrics: false,
         usePasscode: false,
-        useSecureStorageMode: false
+        useSecureStorageMode: false,
       },
       {
         useBiometrics: false,
         usePasscode: true,
-        useSecureStorageMode: false
-      }
+        useSecureStorageMode: false,
+      },
     ].forEach(value =>
       it('stores the values', async () => {
         await service.store(value);
         expect(storage.set).toHaveBeenCalledTimes(3);
-        expect(storage.set).toHaveBeenCalledWith('useBiometrics', value.useBiometrics);
-        expect(storage.set).toHaveBeenCalledWith('usePasscode', value.usePasscode);
-        expect(storage.set).toHaveBeenCalledWith('useSecureStorageMode', value.useSecureStorageMode);
-      })
+        expect(storage.set).toHaveBeenCalledWith(
+          'useBiometrics',
+          value.useBiometrics,
+        );
+        expect(storage.set).toHaveBeenCalledWith(
+          'usePasscode',
+          value.usePasscode,
+        );
+        expect(storage.set).toHaveBeenCalledWith(
+          'useSecureStorageMode',
+          value.useSecureStorageMode,
+        );
+      }),
     );
   });
 });

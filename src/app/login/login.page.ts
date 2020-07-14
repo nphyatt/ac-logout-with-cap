@@ -6,14 +6,17 @@ import { AuthMode, VaultErrorCodes } from '@ionic-enterprise/identity-vault';
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss']
+  styleUrls: ['./login.page.scss'],
 })
 export class LoginPage {
   errorMessage: string;
 
   loginType: string;
 
-  constructor(private authentication: AuthenticationService, private vaultService: VaultService) {}
+  constructor(
+    private authentication: AuthenticationService,
+    private vaultService: VaultService,
+  ) {}
 
   ionViewWillEnter() {
     try {
@@ -73,7 +76,9 @@ export class LoginPage {
           break;
         case AuthMode.BiometricOnly:
           const displayVaultLogin = await this.vaultService.isBiometricsAvailable();
-          this.loginType = displayVaultLogin ? await this.vaultService.supportedBiometricTypes() : '';
+          this.loginType = displayVaultLogin
+            ? await this.vaultService.supportedBiometricTypes()
+            : '';
           break;
         case AuthMode.PasscodeOnly:
           this.loginType = 'Passcode';
@@ -88,6 +93,9 @@ export class LoginPage {
   }
 
   private notFailedOrCancelled(error: any) {
-    return error.code !== VaultErrorCodes.AuthFailed && error.code !== VaultErrorCodes.UserCanceledInteraction;
+    return (
+      error.code !== VaultErrorCodes.AuthFailed &&
+      error.code !== VaultErrorCodes.UserCanceledInteraction
+    );
   }
 }

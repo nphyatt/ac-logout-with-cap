@@ -13,44 +13,49 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: () => import('@app/home/home.module').then(m => m.HomePageModule)
-          }
-        ]
+            loadChildren: () =>
+              import('@app/home/home.module').then(m => m.HomePageModule),
+          },
+        ],
       },
       {
         path: 'about',
         children: [
           {
             path: '',
-            loadChildren: () => import('@app/about/about.module').then(m => m.AboutPageModule)
-          }
-        ]
+            loadChildren: () =>
+              import('@app/about/about.module').then(m => m.AboutPageModule),
+          },
+        ],
       },
       {
         path: 'settings',
         children: [
           {
             path: '',
-            loadChildren: () => import('@app/settings/settings.module').then(m => m.SettingsPageModule)
-          }
-        ]
+            loadChildren: () =>
+              import('@app/settings/settings.module').then(
+                m => m.SettingsPageModule,
+              ),
+          },
+        ],
       },
       {
         path: '',
         redirectTo: '/tabs/home',
-        pathMatch: 'full'
-      }
-    ]
+        pathMatch: 'full',
+      },
+    ],
   },
   {
     path: '',
     redirectTo: '/tabs/home',
-    pathMatch: 'full'
-  }
+    pathMatch: 'full',
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class TabsPageRoutingModule {}

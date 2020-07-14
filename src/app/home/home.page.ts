@@ -8,7 +8,7 @@ import { TeaCategory } from '@app/models';
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss']
+  styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit {
   categories$: Observable<Array<TeaCategory>>;
@@ -16,7 +16,7 @@ export class HomePage implements OnInit {
   constructor(
     private authentication: AuthenticationService,
     private navController: NavController,
-    private teaCategories: TeaCategoriesService
+    private teaCategories: TeaCategoriesService,
   ) {}
 
   ngOnInit() {

@@ -1,5 +1,8 @@
 import { TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 
 import { AuthenticationService, VaultService } from '@app/services';
 import { createVaultServiceMock } from '@app/services/mocks';
@@ -18,16 +21,19 @@ describe('AuthenticationService', () => {
         AuthenticationService,
         { provide: VaultService, useFactory: createVaultServiceMock },
         { provide: Platform, useFactory: createPlatformMock },
-        { provide: Router, useFactory: createRouterMock }
-      ]
+        { provide: Router, useFactory: createRouterMock },
+      ],
     });
 
     httpTestingController = TestBed.inject(HttpTestingController);
   });
 
-  beforeEach(inject([AuthenticationService], (service: AuthenticationService) => {
-    authentication = service;
-  }));
+  beforeEach(inject(
+    [AuthenticationService],
+    (service: AuthenticationService) => {
+      authentication = service;
+    },
+  ));
 
   it('injects', () => {
     expect(authentication).toBeTruthy();

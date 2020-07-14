@@ -6,12 +6,18 @@ import { AuthenticationService } from './services';
 
 @Component({
   selector: 'app-root',
-  templateUrl: 'app.component.html'
+  templateUrl: 'app.component.html',
 })
 export class AppComponent {
-  constructor(private auth: AuthenticationService, private navController: NavController, private platform: Platform) {
+  constructor(
+    private auth: AuthenticationService,
+    private navController: NavController,
+    private platform: Platform,
+  ) {
     this.initializeApp();
-    this.auth.changed.subscribe(authenticated => this.handleAuthChange(authenticated));
+    this.auth.changed.subscribe(authenticated =>
+      this.handleAuthChange(authenticated),
+    );
   }
 
   async initializeApp() {

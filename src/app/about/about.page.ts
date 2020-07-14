@@ -7,14 +7,17 @@ import { User } from '@app/models';
 @Component({
   selector: 'app-about',
   templateUrl: 'about.page.html',
-  styleUrls: ['about.page.scss']
+  styleUrls: ['about.page.scss'],
 })
 export class AboutPage {
   user: User;
   authMode: string;
   bioType: string;
 
-  constructor(private authentication: AuthenticationService, private vaultService: VaultService) {}
+  constructor(
+    private authentication: AuthenticationService,
+    private vaultService: VaultService,
+  ) {}
 
   async ionViewDidEnter() {
     this.user = await this.authentication.getUserInfo();

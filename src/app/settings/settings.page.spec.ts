@@ -3,11 +3,15 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NavController } from '@ionic/angular';
 
 import { SettingsPage } from './settings.page';
-import { AuthenticationService, VaultService, SettingsService } from '@app/services';
+import {
+  AuthenticationService,
+  VaultService,
+  SettingsService,
+} from '@app/services';
 import {
   createAuthenticationServiceMock,
   createVaultServiceMock,
-  createSettingsServiceMock
+  createSettingsServiceMock,
 } from '@app/services/mocks';
 import { createNavControllerMock } from '@test/mocks';
 
@@ -29,8 +33,8 @@ describe('SettingsPage', () => {
         { provide: AuthenticationService, useValue: authentication },
         { provide: VaultService, useValue: identity },
         { provide: NavController, useValue: navController },
-        { provide: SettingsService, useFactory: createSettingsServiceMock }
-      ]
+        { provide: SettingsService, useFactory: createSettingsServiceMock },
+      ],
     }).compileComponents();
   }));
 

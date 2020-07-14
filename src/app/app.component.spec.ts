@@ -16,7 +16,10 @@ describe('AppComponent', () => {
   beforeEach(async(() => {
     originalSplashScreen = Plugins.SplashScreen;
     originalStatusBar = Plugins.StatusBar;
-    Plugins.StatusBar = jasmine.createSpyObj('StatusBar', ['setStyle', 'setBackgroundColor']);
+    Plugins.StatusBar = jasmine.createSpyObj('StatusBar', [
+      'setStyle',
+      'setBackgroundColor',
+    ]);
     Plugins.SplashScreen = jasmine.createSpyObj('SplashScreen', ['hide']);
     TestBed.configureTestingModule({
       declarations: [AppComponent],
@@ -24,8 +27,8 @@ describe('AppComponent', () => {
       providers: [
         { provide: NavController, useFactory: createNavControllerMock },
         { provide: Platform, useFactory: createPlatformMock },
-        { provide: VaultService, useFactory: createVaultServiceMock }
-      ]
+        { provide: VaultService, useFactory: createVaultServiceMock },
+      ],
     }).compileComponents();
   }));
 
@@ -80,7 +83,7 @@ describe('AppComponent', () => {
         tick();
         expect(Plugins.StatusBar.setStyle).toHaveBeenCalledTimes(1);
         expect(Plugins.StatusBar.setStyle).toHaveBeenCalledWith({
-          style: StatusBarStyle.Light
+          style: StatusBarStyle.Light,
         });
       }));
 
@@ -95,7 +98,9 @@ describe('AppComponent', () => {
         TestBed.createComponent(AppComponent);
         tick();
         expect(Plugins.StatusBar.setBackgroundColor).toHaveBeenCalledTimes(1);
-        expect(Plugins.StatusBar.setBackgroundColor).toHaveBeenCalledWith({ color: '#3171e0' });
+        expect(Plugins.StatusBar.setBackgroundColor).toHaveBeenCalledWith({
+          color: '#3171e0',
+        });
       }));
     });
   });

@@ -1,12 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthMode } from '@ionic-enterprise/identity-vault';
 
-import { AuthenticationService, VaultService, SettingsService } from '@app/services';
+import {
+  AuthenticationService,
+  VaultService,
+  SettingsService,
+} from '@app/services';
 
 @Component({
   selector: 'app-settings',
   templateUrl: 'settings.page.html',
-  styleUrls: ['settings.page.scss']
+  styleUrls: ['settings.page.scss'],
 })
 export class SettingsPage implements OnInit {
   useBiometrics: boolean;
@@ -17,7 +21,7 @@ export class SettingsPage implements OnInit {
   constructor(
     private authentication: AuthenticationService,
     private vaultService: VaultService,
-    private settings: SettingsService
+    private settings: SettingsService,
   ) {}
 
   async ngOnInit() {
@@ -59,7 +63,7 @@ export class SettingsPage implements OnInit {
     return this.settings.store({
       useBiometrics: this.useBiometrics,
       usePasscode: this.usePasscode,
-      useSecureStorageMode: this.useSecureStorageMode
+      useSecureStorageMode: this.useSecureStorageMode,
     });
   }
 

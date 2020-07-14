@@ -5,7 +5,7 @@ import {
   HttpEvent,
   HttpInterceptor,
   HttpHandler,
-  HttpRequest
+  HttpRequest,
 } from '@angular/common/http';
 
 import { AuthenticationService } from '@app/services';
@@ -16,7 +16,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(
     req: HttpRequest<any>,
-    next: HttpHandler
+    next: HttpHandler,
   ): Observable<HttpEvent<any>> {
     return from(
       this.requestRequiresToken(req)
@@ -24,12 +24,12 @@ export class AuthInterceptor implements HttpInterceptor {
             if (token) {
               req = req.clone({
                 setHeaders: {
-                  Authorization: 'Bearer ' + token
-                }
+                  Authorization: 'Bearer ' + token,
+                },
               });
             }
           })
-        : Promise.resolve()
+        : Promise.resolve(),
     ).pipe(flatMap(() => next.handle(req)));
   }
 

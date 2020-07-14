@@ -5,7 +5,9 @@
 </ion-header>
 
 <ion-content class="ion-padding ion-text-center">
-  <ion-button expand="full" (click)="signInClicked()" color="tertiary">Sign in</ion-button>
+  <ion-button expand="full" (click)="signInClicked()" color="tertiary"
+    >Sign in</ion-button
+  >
   <div *ngIf="loginType" class="unlock-app" (click)="unlockClicked()">
     <ion-icon name="lock-open"></ion-icon>
     <div>{{ loginType }}</div>

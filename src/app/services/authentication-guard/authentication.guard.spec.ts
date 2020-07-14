@@ -11,9 +11,12 @@ describe('AuthGuard', () => {
     TestBed.configureTestingModule({
       providers: [
         AuthGuard,
-        { provide: AuthenticationService, useFactory: createAuthenticationServiceMock },
-        { provide: NavController, useFactory: createNavControllerMock }
-      ]
+        {
+          provide: AuthenticationService,
+          useFactory: createAuthenticationServiceMock,
+        },
+        { provide: NavController, useFactory: createNavControllerMock },
+      ],
     });
   });
 
@@ -31,7 +34,9 @@ describe('AuthGuard', () => {
 
     describe('when the user is authenticated', () => {
       beforeEach(() => {
-        authenticationService.isAuthenticated.and.returnValue(Promise.resolve(true));
+        authenticationService.isAuthenticated.and.returnValue(
+          Promise.resolve(true),
+        );
       });
 
       it('resolves to true', async () => {
@@ -47,7 +52,9 @@ describe('AuthGuard', () => {
 
     describe('when the user is not authenticated', () => {
       beforeEach(() => {
-        authenticationService.isAuthenticated.and.returnValue(Promise.resolve(false));
+        authenticationService.isAuthenticated.and.returnValue(
+          Promise.resolve(false),
+        );
       });
 
       it('resolves to false', async () => {

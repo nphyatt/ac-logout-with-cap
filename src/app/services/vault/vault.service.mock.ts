@@ -17,7 +17,7 @@ export function createVaultServiceMock() {
     ready: Promise.resolve(),
     setAuthMode: Promise.resolve(),
     setDesiredAuthMode: Promise.resolve(),
-    unlock: Promise.resolve()
+    unlock: Promise.resolve(),
   });
   vault.lockChanged = new Subject();
   return vault;

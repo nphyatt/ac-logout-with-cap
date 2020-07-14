@@ -8,7 +8,7 @@ import { VaultService } from '../vault/vault.service';
 import { User } from '@app/models';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthenticationService extends IonicAuth {
   private vaultService: VaultService;
@@ -45,7 +45,7 @@ export class AuthenticationService extends IonicAuth {
       if (message !== undefined && message.startsWith('AADB2C90118')) {
         // The address you pass back is the custom user flow (policy) endpoint
         await super.login(
-          'https://vikingsquad.b2clogin.com/vikingsquad.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1_password_reset'
+          'https://vikingsquad.b2clogin.com/vikingsquad.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1_password_reset',
         );
       } else {
         throw new Error(err.error);
@@ -78,7 +78,7 @@ export class AuthenticationService extends IonicAuth {
       id: idToken.sub,
       email: email,
       firstName: idToken.firstName,
-      lastName: idToken.lastName
+      lastName: idToken.lastName,
     };
   }
 }

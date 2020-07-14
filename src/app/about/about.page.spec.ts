@@ -5,7 +5,10 @@ import { AuthMode } from '@ionic-enterprise/identity-vault';
 
 import { AboutPage } from './about.page';
 import { AuthenticationService, VaultService } from '@app/services';
-import { createAuthenticationServiceMock, createVaultServiceMock } from '@app/services/mocks';
+import {
+  createAuthenticationServiceMock,
+  createVaultServiceMock,
+} from '@app/services/mocks';
 import { createNavControllerMock } from '@test/mocks';
 
 describe('AboutPage', () => {
@@ -19,11 +22,11 @@ describe('AboutPage', () => {
       providers: [
         {
           provide: AuthenticationService,
-          useFactory: createAuthenticationServiceMock
+          useFactory: createAuthenticationServiceMock,
         },
         { provide: VaultService, useFactory: createVaultServiceMock },
-        { provide: NavController, useFactory: createNavControllerMock }
-      ]
+        { provide: NavController, useFactory: createNavControllerMock },
+      ],
     }).compileComponents();
   }));
 
@@ -43,20 +46,22 @@ describe('AboutPage', () => {
       (auth as any).getUserInfo.and.returnValue(
         Promise.resolve({
           email: 'test@test.com',
-          id: '42-73'
-        })
+          id: '42-73',
+        }),
       );
       expect(component.user).toBeFalsy();
       await component.ionViewDidEnter();
       expect(component.user).toEqual({
         email: 'test@test.com',
-        id: '42-73'
+        id: '42-73',
       });
     });
 
     it('gets the auth mode', async () => {
       const vaultService = TestBed.inject(VaultService);
-      (vaultService as any).getAuthMode.and.returnValue(Promise.resolve(AuthMode.InMemoryOnly));
+      (vaultService as any).getAuthMode.and.returnValue(
+        Promise.resolve(AuthMode.InMemoryOnly),
+      );
       await component.ionViewDidEnter();
       expect(vaultService.getAuthMode).toHaveBeenCalledTimes(1);
       expect(component.authMode).toEqual('InMemoryOnly');
@@ -64,7 +69,9 @@ describe('AboutPage', () => {
 
     it('gets the biometric types', async () => {
       const vaultService = TestBed.inject(VaultService);
-      (vaultService as any).supportedBiometricTypes.and.returnValue(Promise.resolve('Blood, First Born Child'));
+      (vaultService as any).supportedBiometricTypes.and.returnValue(
+        Promise.resolve('Blood, First Born Child'),
+      );
       await component.ionViewDidEnter();
       expect(vaultService.supportedBiometricTypes).toHaveBeenCalledTimes(1);
       expect(component.bioType).toEqual('Blood, First Born Child');

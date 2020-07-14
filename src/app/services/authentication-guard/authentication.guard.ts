@@ -5,13 +5,13 @@ import { NavController } from '@ionic/angular';
 import { AuthenticationService } from '../authentication/authentication.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  constructor (
+  constructor(
     private authentication: AuthenticationService,
     private navCtrl: NavController,
-  ) { }
+  ) {}
 
   async canActivate(): Promise<boolean> {
     const authed = await this.authentication.isAuthenticated();
