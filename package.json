@@ -11,6 +11,7 @@
     "e2e": "ng e2e",
     "lint": "ng lint",
     "ng": "ng",
+    "postinstall": "ngcc",
     "start": "ng serve --port=8100",
     "start:md": "ionic cordova run android --prod",
     "test": "ng test --browsers=ChromeHeadless",
