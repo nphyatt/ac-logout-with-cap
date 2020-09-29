@@ -30,7 +30,7 @@ The `AuthentationService` handles the login and logout protocols for integrating
 
 This service extends Auth Connect's `IonicAuth` class, adding the minimal functionality required by the application. The base class manages all of the authentication keys, one of which generally include an ID token that defines the current user, an access token that determines the current access, and a refresh token which is used to refresh the access token as needed.
 
-### Identity Service
+### Vault Service
 
 The `VaultService` is the service that allows Auth Connect to store the authentication tokens. In this case we are using Identity Vault as the storage mechanism. You could also create your own storage service. Auth Connect contains a TokenStorageProvider interface that you can use to create your own storage service if you would like to. However, we suggest keeping things simple by using Identity Vault.
 
