@@ -1,3 +1,7 @@
+# !!Deprecated!!
+
+This demo application has been deprecated and is no longer maintained. It will eventually be removed. Please see the [feature/auth-connect](https://github.com/ionic-team/tea-taster-angular/tree/feature/auth-connect) branch of our Angular training application instead.
+
 # Ionic Customer Success Demo - Auth Connect with Identity Vault
 
 This application shows the use of Ionic's Auth Connect solution to perform an OAuth login and Ionic's Identity Vault solution to store the resulting authentication tokens. This application is configured to work both in a browser and in a hybrid native application. We assume that you have access to Ioinic's Auth Connect and Identity Vault products. If this is not the case, please contact our sales department.
