@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
+import { Plugins } from '@capacitor/core';
 
 import { AuthenticationService, VaultService } from '@app/services';
 import { AuthMode, VaultErrorCodes } from '@ionic-enterprise/identity-vault';
+
+const { Browser } = Plugins;
 
 @Component({
   selector: 'app-login',
@@ -40,6 +43,18 @@ export class LoginPage {
       this.errorMessage = '';
     } catch (e) {
       this.errorMessage = e.message || 'Unknown login error';
+      console.error(e);
+    }
+  }
+
+  async signOutClicked() {
+    try {
+      Browser.open({
+        url:
+          'https://vikingsquad.b2clogin.com/vikingsquad.onmicrosoft.com/oauth2/v2.0/logout?p=b2c_1_signup_signin&client_id=b69e2ee7-b67a-4e26-8a38-f7ca30d2e4d4&return_to=myapp%3A%2F%2Fcallback&redirect_uri=myapp%3A%2F%2Fcallback&post_logout_redirect_uri=myapp%3A%2F%2Fcallback%3Flogout%3Dtrue',
+      });
+    } catch (e) {
+      this.errorMessage = e.message || 'Unknown logout error';
       console.error(e);
     }
   }
